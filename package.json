@@ -4,11 +4,15 @@
   "description": "A simple CAP project.",
   "license": "ISC",
   "dependencies": {
+    "@sap/audit-logging": "^3.1.0",
     "@sap/cds": "^3.34.1",
     "@sap/hana-client": "^2.4.182",
     "@sap/xb-msg-amqp-v100": "^0.9.39",
+    "@sap/xsenv": "^2.1.0",
+    "@sap/xssec": "^2.2.3",
     "express": "^4",
-    "grunt": "^1.1.0"
+    "grunt": "^1.1.0",
+    "passport": "^0.4.1"
   },
   "scripts": {
     "start": "npx cds run",
@@ -39,9 +43,12 @@
           "credentials": {
             "destination": "s4h-basic",
             "requestTimeout": 18000000,
-            "prefix": "refapps/bpems/abc/S4H/BO"
+            "prefix": "refapps/s4ems/abc/S4H/BO"
           }
         }
+      },     
+      "uaa": {
+        "kind": "xsuaa"
       }
     }
   }

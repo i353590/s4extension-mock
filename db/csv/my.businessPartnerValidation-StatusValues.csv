@@ -1,5 +1,5 @@
-code;value;criticality
-N;NEW;3
-P;PROCESS;2
-INV;INVALID;1
-V;VERIFIED;4
+code;value;criticality;updateCode
+N;NEW;3;false
+P;PROCESS;2;false
+INV;INVALID;1;true
+V;VERIFIED;4;true

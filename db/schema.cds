@@ -31,6 +31,7 @@ entity StatusValues {
   key code: String ;
     value: String;
     criticality: Integer;
+    updateCode:Boolean;
 }
 
 annotate Notification with {

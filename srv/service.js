@@ -3,6 +3,7 @@
 module.exports = async srv => {
   const {BusinessPartnerAddress, Notification, Address, BusinessPartner} = srv.entities;
   const bupaSrv = await cds.connect.to("API_BUSINESS_PARTNER");
+  
 
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
@@ -39,21 +40,25 @@ module.exports = async srv => {
     sendToServerless(req.businessPartnerId);
   });
 
-  srv.on("UPDATE", Address, async req => {
-    // To keep track of modification status
-    req.data.isModified = true;
-    const res = await cds.tx(req).run(UPDATE(Address).set(req.data).where({businessPartnerId: req.data.businessPartnerId}));
-    console.log("<< modified address >>", res);
-    
-  });
+  
 
-  // srv.on("PATCH", Address, async req => {
+  // srv.on("UPDATE", Address, async req => {
   //   // To keep track of modification status
   //   req.data.isModified = true;
-  //   const res = await cds.tx(req).run(UPDATE(Address).set(req).where({businessPartnerId: req.data.businessPartnerId}));
+  //   const res = await cds.tx(req).run(UPDATE(Address).set(req.data).where({businessPartnerId: req.data.businessPartnerId}));
   //   console.log("<< modified address >>", res);
     
   // });
+  
+
+  srv.on("PATCH", Address, async (req, next) => {
+    // To keep track of modification status
+    req.isModified = true;
+    //const res = await cds.tx(req).run(UPDATE(Address).set(req).where({businessPartnerId: req.businessPartnerId}));
+    // console.log("<< modified address >>", res);
+    return next();
+    
+  });
 
   async function sendToServerless(bp){
     const result =  await cds.run(SELECT.one.from("my.businessPartnerValidation.Notification as N").leftJoin("my.businessPartnerValidation.Address as A").on({"N.businessPartnerId":"A.businessPartnerId"}).where("N.businessPartnerId", bp));

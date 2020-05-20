@@ -43,6 +43,7 @@ annotate my.Notification with {
 
 annotate my.Notification with @(
     UI:{
+        UpdateHidden: verificationStatus.updateCode,
         HeaderInfo: {
             TypeName: '{i18n>Notification}',
             TypeNamePlural: '{i18n>Notifications}',
@@ -76,7 +77,8 @@ annotate my.Notification @(
     Capabilities: {
         Insertable : false,
         Deletable : false,
-        Updatable : true
+        Updatable : true,
+        // UpdateRestrictions:
 });
 
 annotate my.Notification with {
