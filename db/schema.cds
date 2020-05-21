@@ -5,13 +5,6 @@ entity Notification: managed, cuid {
     businessPartnerId: String;
     businessPartnerName: String;
   verificationStatus: Association to StatusValues;
-  // @(
-	// 	title: 'BusinessPartner Status',
-	// 	Common: {
-	// 		ValueList: {entity: 'StatusValues'},
-	// 		ValueListWithFixedValues,
-	// 		FieldControl: #Mandatory
-	// 	});
   address: Composition of many Address on address.notification=$self;
   createdAt  : Timestamp @cds.on.insert : $now;
 }

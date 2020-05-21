@@ -12,7 +12,8 @@
     "@sap/xssec": "^2.2.3",
     "express": "^4",
     "grunt": "^1.1.0",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "postcode-validator": "^3.1.0"
   },
   "scripts": {
     "start": "npx cds run",
@@ -46,7 +47,7 @@
             "prefix": "refapps/s4ems/abc/S4H/BO"
           }
         }
-      },     
+      },
       "uaa": {
         "kind": "xsuaa"
       }
