@@ -3,8 +3,8 @@
 module.exports = async srv => {
   const {BusinessPartnerAddress, Notification, Address, BusinessPartner} = srv.entities;
   const bupaSrv = await cds.connect.to("API_BUSINESS_PARTNER");
+  const {postcodeValidator} = require('postcode-validator');
   
-
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
@@ -35,33 +35,31 @@ module.exports = async srv => {
     console.log("<< BP marked verified >>")
   });
 
-  srv.after("UPDATE", Notification, async req => {
-    console.log("Notification update", req.businessPartnerId);
-    sendToServerless(req.businessPartnerId);
+  srv.after("UPDATE", Notification, async data => {
+    console.log("Notification update", data.businessPartnerId);
+    if(data.verificationStatus_code === "P" || data.verificationStatus_code === "INV")
+      sendToServerless(data);
   });
 
-  
+  srv.before("SAVE", Notification, async (req) => {
+    if(req.data.verificationStatus_code == "V"){
+      req.error({code: '400', message: "Cannot mark as VERIFIED. Please change to PROCESS", numericSeverity:2, target: 'verificationStatus_code'});
+    }
+  });
 
-  // srv.on("UPDATE", Address, async req => {
-  //   // To keep track of modification status
-  //   req.data.isModified = true;
-  //   const res = await cds.tx(req).run(UPDATE(Address).set(req.data).where({businessPartnerId: req.data.businessPartnerId}));
-  //   console.log("<< modified address >>", res);
-    
-  // });
-  
 
-  srv.on("PATCH", Address, async (req, next) => {
+  srv.after("PATCH", Address, async (data, req) => {
     // To keep track of modification status
-    req.isModified = true;
-    //const res = await cds.tx(req).run(UPDATE(Address).set(req).where({businessPartnerId: req.businessPartnerId}));
-    // console.log("<< modified address >>", res);
-    return next();
-    
+    isAddressModified=true;
+    const isValidPinCode = postcodeValidator(data.postalCode, data.country);
+    if(!isValidPinCode){
+      req.error({code: '400', message: "invalid postal code", numericSeverity:2, target: 'postalCode'});
+    } 
+    return req.info({numericSeverity:1, target: 'postalCode'});  
   });
 
-  async function sendToServerless(bp){
-    const result =  await cds.run(SELECT.one.from("my.businessPartnerValidation.Notification as N").leftJoin("my.businessPartnerValidation.Address as A").on({"N.businessPartnerId":"A.businessPartnerId"}).where("N.businessPartnerId", bp));
+  async function sendToServerless(result){
+    // const result =  await cds.run(SELECT.one.from("my.businessPartnerValidation.Notification as N").leftJoin("my.businessPartnerValidation.Address as A").on({"N.businessPartnerId":"A.businessPartnerId"}).where("N.businessPartnerId", bp));
     const statusValues={"N":"NEW", "P":"PROCESS", "INV":"INVALID", "V":"VERIFIED"}
     // Format JSON as per serverless requires
     const formatter = {
@@ -69,13 +67,14 @@ module.exports = async srv => {
       verificationStatus: statusValues[result.verificationStatus_code]
     }
 
-    // if(result.isModified == true){
+    // if(isAddressModified){
       formatter.address = {
-        addressId: result.addressId,
-        streetName: result.streetName,
-        postalCode: result.postalCode
-      }
-    // }
+        addressId: result.address[0].addressId,
+        streetName: result.address[0].streetName,
+        postalCode: result.address[0].postalCode
+      // }
+      // isAddressModified=false;
+    }
     console.log("<< data to serverless >>>", result);
     console.log("<< formatted >>>>>", formatter);
     bupaSrv.emit("BusinessPartner/verified", formatter);

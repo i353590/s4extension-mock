@@ -57,7 +57,6 @@ annotate my.Notification with @(
           
         ],
          HeaderFacets: [
-            //  {$Type: 'UI.ReferenceFacet', ID: 'HeaderBpStatus', Target: '@UI.DataPoint#BpStatus'},
              {$Type: 'UI.ReferenceFacet', ID: 'HeaderBpStatus', Target: '@UI.DataPoint#BpName'},
              {$Type  : 'UI.ReferenceFacet', Target : '@UI.FieldGroup#Detail'}
             
@@ -65,7 +64,6 @@ annotate my.Notification with @(
          Facets: [
             {$Type: 'UI.ReferenceFacet', Target: 'address/@UI.LineItem', Label: 'Address Facet'},
         ],
-        //  DataPoint#BpStatus: {$Type: 'UI.DataField', Value: verificationStatus_code, Title: 'Verification Status'},
          DataPoint#BpName: {Value: businessPartnerName, Title: 'Business Partner Name'},
           FieldGroup #Detail : {Data : [
               {$Type: 'UI.DataField', Value: verificationStatus_code, Title: 'Verification Status'}
@@ -78,7 +76,6 @@ annotate my.Notification @(
         Insertable : false,
         Deletable : false,
         Updatable : true,
-        // UpdateRestrictions:
 });
 
 annotate my.Notification with {
