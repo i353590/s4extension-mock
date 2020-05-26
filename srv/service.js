@@ -47,13 +47,15 @@ module.exports = async srv => {
     }
   });
 
+  srv.before("PATCH", Address, async (req) => {
+    // To set whether address is Edited
+    req.data.isModified = true;
+  });
 
   srv.after("PATCH", Address, async (data, req) => {
-    // To keep track of modification status
-    isAddressModified=true;
     const isValidPinCode = postcodeValidator(data.postalCode, data.country);
     if(!isValidPinCode){
-      req.error({code: '400', message: "invalid postal code", numericSeverity:2, target: 'postalCode'});
+      return req.error({code: '400', message: "invalid postal code", numericSeverity:2, target: 'postalCode'});
     } 
     return req.info({numericSeverity:1, target: 'postalCode'});  
   });
@@ -67,13 +69,12 @@ module.exports = async srv => {
       verificationStatus: statusValues[result.verificationStatus_code]
     }
 
-    // if(isAddressModified){
+    if(result.address[0].isModified){
       formatter.address = {
         addressId: result.address[0].addressId,
         streetName: result.address[0].streetName,
         postalCode: result.address[0].postalCode
-      // }
-      // isAddressModified=false;
+      }
     }
     console.log("<< data to serverless >>>", result);
     console.log("<< formatted >>>>>", formatter);
