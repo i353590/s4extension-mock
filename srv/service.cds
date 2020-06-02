@@ -15,6 +15,11 @@ service SalesService  @(requires:'authenticated-user'){
       PostalCode as postalCode
   };
 
+  event BusinessPartnerVerified {
+    businessPartner: UUID;
+    // TODO: Model your event according to the data you send
+  }
+
   @readonly entity BusinessPartner as projection on BUPA_API.A_BusinessPartner{
      key BusinessPartner as businessPartnerId,
       BusinessPartnerFullName as businessPartnerName
