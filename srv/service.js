@@ -87,6 +87,13 @@ module.exports = async srv => {
     // `undefined` will be replaced with the namespace of your
     // Enterprise Messaging instance.
     srv.emit('BusinessPartnerVerified', formatter)
+
+    // If you're uncomfortable with CAP-generated topics, you can also specify
+    // your own topic like this
+    // srv.emit('your/custom/topic', formatter) (if topic includes slashes, it's
+    // automatically interpreted as a topic)
+    // or if it doesn't contain slashes
+    // srv.emit('topic:yourTopic', formatter)
   }
 
   
