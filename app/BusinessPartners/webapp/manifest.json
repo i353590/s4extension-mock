@@ -90,7 +90,7 @@
                     ]
                 },
                 {
-                    "pattern": "Notification({key})",
+                    "pattern": "Notifications({key})",
                     "name": "NotificationObjectPage",
                     "target": [
                         "NotificationList",
@@ -98,7 +98,7 @@
                     ]
                 },
                 {
-                    "pattern": "Notification({key})/address({key2}):?query:",
+                    "pattern": "Notifications({key})/addresses({key2}):?query:",
                     "name": "AddressObjectPage_address",
                     "target": "AddressObjectPage_address"
                 }
@@ -110,10 +110,10 @@
                     "name": "sap.fe.templates.ListReport",
                     "options": {
                         "settings": {
-                            "entitySet": "Notification",
+                            "entitySet": "Notifications",
                             "variantManagement": "Page",
                             "navigation": {
-                                "Notification": {
+                                "Notifications": {
                                     "detail": {
                                         "route": "NotificationObjectPage"
                                     }
@@ -128,7 +128,7 @@
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "entitySet": "Notification",
+                            "entitySet": "Notifications",
                             "navigation": {}
                         }
                     }
@@ -139,7 +139,7 @@
                     "name": "sap.fe.templates.ObjectPage",
                     "options": {
                         "settings": {
-                            "entitySet": "Address",
+                            "entitySet": "Addresses",
                             "navigation": {}
                         }
                     }
