@@ -1,7 +1,7 @@
 
- using SalesService as my from './service';
+ using service.businessPartnerValidation.SalesService as my from './service';
 
-annotate my.Address with @(
+annotate my.Addresses with @(
     UI: {   
         HeaderInfo: {
             TypeName: 'Address',
@@ -26,7 +26,7 @@ annotate my.Address with @(
     }
 );
 
-annotate my.Address with {
+annotate my.Addresses with {
     addressId @( Common.Label : 'Address ID' ) @readonly;
     businessPartnerId @( Common.Label : 'Business Partner ID' ) @readonly;
     streetName @( Common.Label : 'Street Name' );
@@ -35,13 +35,13 @@ annotate my.Address with {
     postalCode @( Common.Label : 'Postal Code' );
 }
 
-annotate my.Notification with {
+annotate my.Notifications with {
     businessPartnerId @( Common.Label : 'Business Partner ID' );
     businessPartnerName @( Common.Label : 'Business Partner Name' ) @readonly;
     verificationStatus @( Common.Label : 'Verification Status' );
 }
 
-annotate my.Notification with @(
+annotate my.Notifications with @(
     UI:{
         UpdateHidden: verificationStatus.updateCode,
         HeaderInfo: {
@@ -62,7 +62,7 @@ annotate my.Notification with @(
             
         ],
          Facets: [
-            {$Type: 'UI.ReferenceFacet', Target: 'address/@UI.LineItem', Label: 'Address Facet'},
+            {$Type: 'UI.ReferenceFacet', Target: 'addresses/@UI.LineItem', Label: 'Address Facet'},
         ],
          DataPoint#BpName: {Value: businessPartnerName, Title: 'Business Partner Name'},
           FieldGroup #Detail : {Data : [
@@ -71,14 +71,14 @@ annotate my.Notification with @(
     }
 );
 
-annotate my.Notification @(
+annotate my.Notifications @(
     Capabilities: {
         Insertable : false,
         Deletable : false,
         Updatable : true,
 });
 
-annotate my.Notification with {
+annotate my.Notifications with {
     verificationStatus @(
         Common: {
         ValueList: {entity: 'StatusValues'},

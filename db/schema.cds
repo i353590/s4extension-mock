@@ -1,16 +1,15 @@
 namespace my.businessPartnerValidation;
 using { managed, cuid } from '@sap/cds/common';
 
-entity Notification: managed, cuid {
-    businessPartnerId: String;
-    businessPartnerName: String;
+entity Notifications: managed, cuid {
+  businessPartnerId: String;
+  businessPartnerName: String;
   verificationStatus: Association to StatusValues;
-  address: Composition of many Address on address.notification=$self;
-  createdAt  : Timestamp @cds.on.insert : $now;
+  addresses: Composition of many Addresses on addresses.notifications=$self;
 }
 
-entity Address:  cuid {
-  notification: Association to Notification;
+entity Addresses:  cuid {
+  notifications: Association to Notifications;
   addressId:String;
   country:String;
   cityName:String;
@@ -27,8 +26,7 @@ entity StatusValues {
     updateCode:Boolean;
 }
 
-annotate Notification with {
+annotate Notifications with {
   businessPartnerId @title:'BusinessPartner ID' @readonly;
   verificationStatus @title:'Verfication Status' @assert.enum;
-  createdAt @title:'Creation Date' @readonly;
 }
