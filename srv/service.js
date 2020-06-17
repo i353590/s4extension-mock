@@ -27,9 +27,9 @@ module.exports = async srv => {
   bupaSrv.on("BusinessPartner/Changed", async msg => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
-    const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notification, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
+    const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
     if(bpIsAlive.verificationStatus_code == "P"){
-      const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notification).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"V"}));
+      const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"V"}));
     }    
     console.log("<< BP marked verified >>")
   });
