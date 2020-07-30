@@ -65,16 +65,14 @@ module.exports = async srv => {
     // Format JSON as per serverless requires
     const payload = {
       businessPartner: result.businessPartnerId,
-      verificationStatus: statusValues[result.verificationStatus_code]
+      businessPartnerName: result.businessPartnerName,
+      verificationStatus: statusValues[result.verificationStatus_code],
+      addressId: result.addresses[0].addressId,
+      streetName: result.addresses[0].streetName,
+      postalCode: result.addresses[0].postalCode,
+      country: result.addresses[0].country
     }
-
-    if(result.addresses[0].isModified){
-      payload.address = {
-        addressId: result.addresses[0].addressId,
-        streetName: result.addresses[0].streetName,
-        postalCode: result.addresses[0].postalCode
-      }
-    }
+    
     console.log("<< data to serverless >>>", result);
     console.log("<< formatted >>>>>", payload);
     srv.emit("BusinessPartnerVerified", payload);
