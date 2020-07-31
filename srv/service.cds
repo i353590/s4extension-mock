@@ -24,8 +24,13 @@ service SalesService  @(requires:'authenticated-user'){
 
   event BusinessPartnerVerified {
     businessPartner: String;
+    businessPartnerName: String;
     verificationStatus: String;
-    address: String;
+    addressId: String;
+    streetName: String;
+    postalCode: String;
+    country: String;
+    addressModified: String;
   }
 
 }

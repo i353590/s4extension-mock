@@ -70,7 +70,8 @@ module.exports = async srv => {
       addressId: result.addresses[0].addressId,
       streetName: result.addresses[0].streetName,
       postalCode: result.addresses[0].postalCode,
-      country: result.addresses[0].country
+      country: result.addresses[0].country,
+      addressModified: result.address[0].isModified
     }
     
     console.log("<< data to serverless >>>", result);
