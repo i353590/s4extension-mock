@@ -1,34 +1,21 @@
 # RefappQRCodeGenerator
 
-This is a serverless function created as an utility which is used by the [S/4 HANA Extend Business Process application](https://github.tools.sap/refapps/cloud-cap-s4ems-bp) to generate a qrcode for the updated Business Partner address and it uploads the same to S4HANA on premise system alone with the business partner details.
-This implementation showcases the following features of [SAP Cloud Platform Extension Factory Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html):
+This serverless function created as a utility is used by the to generate a QR Code for the updated Business Partner address. It uploads the same to S4HANA on premise system alone with the business partner details.
+
+This implementation showcases: 
+  - [SAP Cloud Platform Extension Factory Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html):
   - AMQP trigger for invoking the serverless function
   - oData Provisioning for registering the S4HANA oData Services(API_BUSINESS_PARTNER and API_CV_ATTACHMENT_SERVICE)
   - Consumption of the registered S4 HANA oData services from a serverless function
 
-## Requirements
-
-* A working instance of Enterprise Messaging.
-* A key to be created for Enterprise Messaging instance
-* A working instance of Destination Service.
-* A key to be created for Destination Service
-* One queue set up for receiving messages sent by the cf application
-* Subscription for Extension Center
-* Subscription for Enterprise Messaging App
-* Subscription for Bizapp Studio
-* Entitlement to create a new Serverless instance.
-
 ## Enable IWBEP component in the S4HANA system
 1. Login to S4HANA System
-2. run transaction \nsicf
+2. run transaction sicf
 3. click on execute
 4. Traverse to default -> host -> sap -> iwbep -> right click -> activate service
 
 ## Register Odata Service and Configure Destinations
-1. Login to Cloud Connector 
-2. Add cloud subaccount to the cloud connector
-3. Under Cloud to On-premise connectivity  -> Map Virtual to Internal System and then add resource
-4. Create a destination in the sap cloud cockpit
+1. Create a destination in the sap cloud cockpit
  url : http://xxx:xxx/sap/iwbep?sap-client=100
  Proxy Type : On-Premise
  Authentication: Basic
@@ -37,10 +24,10 @@ This implementation showcases the following features of [SAP Cloud Platform Exte
  Password: S4HANA System password
  Additional Properties:
  odc: true
-5. Login to Extension Center
-6. Services -> Register 
-7. Register API_BUSINESS_PARTNER  and API_CV_ATTACHMENT_SRV services 
-8. Click on the service API_BUSINESS_PARTNER and copy the service url till SAP eg., https://xxx.xxxx.services.xfs.cloud.sap/odata/SAP/
+2. Login to Extension Center
+3. Services -> Register 
+4. Register API_BUSINESS_PARTNER  and API_CV_ATTACHMENT_SRV services 
+5. Click on the service API_BUSINESS_PARTNER and copy the service url till SAP eg., https://xxx.xxxx.services.xfs.cloud.sap/odata/SAP/
 
 ## Deployment - Business Application Studio
 
@@ -87,9 +74,7 @@ Register Destination Service instance
 xfsrt-cli faas service register -b <Destination_service_key_name> -s <service_name>
 ```
 
-git clone https://github.tools.sap/refapps/RefappBpAggregator.git
-
-move to project. Cd RefappBpAggregator
+move to project. cd serverlessQRCodeGenerator
 
 Install faas-sdk
 ```bash
