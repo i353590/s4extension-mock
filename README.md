@@ -1,29 +1,26 @@
 # S/4 HANA Extend Business Process Scenario
 
 ## Description
-The main intent of this scenario is to complement an existing business process in an SAP solution – currently SAP S/4HANA, SAP SuccessFactors or selected SAP Cloud solutions - with additional business process steps. This involves adding major logic and/or additional data and goes beyond simple UI changes.
-
-More details of extension scnenarios can be found [here](https://pages.github.tools.sap/sapcpextensions/).
-Detailed steps of the S/4 HANA Extension Scenario can be found [here](https://github.wdf.sap.corp/refapps/cp-extension-scenarios/blob/master/s4-extend-business-process/Clickstream.xlsx?raw=true)
+The main intent of this scenario is to complement an existing business process in an SAP solution – currently SAP S/4HANA with additional business process steps. This involves adding major logic and/or additional data and goes beyond simple UI changes.
 
 This application showcases:
 
-- Building application on SAP Cloud Platform using SAP Cloud Application Programming Model(CAP)
-- Consuming Events from S/4 HANA on premise using SAP CP Enterprise Messaging
+- Building application on SAP Cloud Platform(CP) using [SAP Cloud Application Programming Model(CAP)](https://cap.cloud.sap/docs/)
+- Consuming Events from S/4 HANA on premise using [SAP CP Enterprise Messaging](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/df532e8735eb4322b00bfc7e42f84e8d.html)
 - Consuming REST API's from S/4 HANA on premise using SAP CP Connectivity Service
-- Serverless Runtime
+- Building and deloying a function in [SAP Cloud platform Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html)
 
 ## Business Scenario
 
-A business scenario is used to showcase how to build a S/4 HANA on premise extension Application.
+A business scenario is used to showcase how to build a S/4 HANA on premise extension Application on SAP CP.
 
-As an employee of Business Partner Validation Firm iCredible, which is a third party vendor of ACME Corporation, John would like to get notifications whenever new Business Partners are added in the S/4 HANA backend system of ACME Corporation. John would then be able to review the Business Partner details in his extension app. He would proceed to visit the Business Partner’s registered office and do some background verification. John would then proceed to update/validate the verification details into the extension app. Once the details are verified, the Business Partner gets activated in the S/4 HANA system of ACME Corporation.
+John who is an employee of Business Partner Validation Firm iCredible, which is a third party vendor of ACME Corporation would like to get notifications whenever new Business Partners are added in the S/4 HANA backend system of ACME Corporation. John would then be able to review the Business Partner details in his extension app. He would proceed to visit the Business Partner’s registered office and do some background verification. John would then proceed to update/validate the verification details into the extension app. Once the details are verified, the Business Partner gets activated in the S/4 HANA system of ACME Corporation.
 
-- Custom extension application that works independently from S/4 HANA​
+- Custom extension application that works independently from S/4 HANA.
 
-- Changes in S/4 communicated via events in real time to extension application.​
+- Changes in S/4 communicated via events in real time to extension application.
 
-- Compute intensive batch processing available on demand (serverless environment)​
+- Compute intensive processing available on demand (serverless environment).
 
 - Vendor personnel needs access to only custom app
 
@@ -33,7 +30,7 @@ As an employee of Business Partner Validation Firm iCredible, which is a third p
 
 ![solution diagram](./documentation/images/solution-diagram.jpg)
 
-The Business Partner Validation application is developed using [SAP Cloud Application programming Model (CAP)](https://cap.cloud.sap/docs/) and runs and runs on the SAP Cloud Platform Cloud Foundry Environment. It consumes platform services like Enterprise Messaging, SAP HANA and Connectivity. The events generated in S/4 HANA on preimse are inserted into the Enterprise messaging queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the HANA database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system. The Business Partner Validation App also places the processed events into a Enterprise Message Queue from where a Serverless Application consumes it and posts it back to S/4 HANA on premise system
+The Business Partner Validation application is developed using SAP Cloud Application programming Model (CAP) and runs and runs on the SAP Cloud Platform Cloud Foundry Environment. It consumes platform services like Enterprise Messaging, SAP HANA and Connectivity. The events generated in S/4 HANA on preimse are inserted into the Enterprise messaging queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the HANA database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system. The Business Partner Validation App also places the processed events into a Enterprise Message Queue from where a Serverless Application consumes it and posts it back to S/4 HANA on premise system using odata provisioning.
 
 ## Requirements
 * S4 Hana on premise system.
@@ -60,11 +57,10 @@ The application requires below set of SAP Cloud Platform Entitelements/Quota
 
 | Service                           | Plan       | Number of Instances |
 |-----------------------------------|------------|:-------------------:|
-| Destination                       | lite       |          1          |
 | Enterprise Messaging              | default    |          1          |
 | SAP HANA Schemas & HDI Containers | hdi-shared |          1          |
 | SAP Hana Service                  | 64standard |          1          |
-| Application Runtime               |            |          3          |
+| Application Runtime               |            |          1          |
 | Extension Factory Runtime         |            |          1          |
 
 
@@ -173,4 +169,7 @@ No known issues.
 ## How to Obtain Support
 
 In case you find a bug, or you need additional support, please open an issue here in GitHub.
+
+## License
+Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
 
