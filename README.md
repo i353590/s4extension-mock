@@ -34,7 +34,7 @@ The Business Partner Validation application is developed using SAP Cloud Applica
 
 ## Requirements
 * S4 Hana on premise system.
-* SAP Cloud Platform account with [Enterprise Messaging](https://help.sap.com/viewer/product/SAP_ENTERPRISE_MESSAGING/Cloud/en-US) service. The 'default' plan for Enterprise Messaging service is required.
+* SAP Cloud Platform account
 
 ### For local development you would require the following:
 * [Node js](https://nodejs.org/en/download/)
@@ -49,8 +49,6 @@ The Business Partner Validation application is developed using SAP Cloud Applica
 * [multiapps plugin](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin) - `cf install-plugin multiapps`  
 *  mbt -  `npm install -g mbt`
 
-## Configuration
-
 ### Entitlements
 
 The application requires below set of SAP Cloud Platform Entitelements/Quota
@@ -62,6 +60,9 @@ The application requires below set of SAP Cloud Platform Entitelements/Quota
 | SAP Hana Service                  | 64standard |          1          |
 | Application Runtime               |            |          1          |
 | Extension Factory Runtime         |            |          1          |
+
+
+## Configuration
 
 
 ### Project Structure
@@ -76,13 +77,20 @@ File / Folder | Purpose
 `package.json` | project metadata and configuration
 `readme.md` | this getting started guide
 
+### Step 1: Setup Cloud platform subaccount
 
-### Steps to deploy locally
+### Step 2: S/4 HANA Enable oData Service for business partner
+
+### Step 3: Setup connectivity between S4Hana system, SAP CP
+
+### Step 4: Build and deploy the CAP application
+
+#### Steps to deploy locally
 
 - Open terminal in VSCode
 - Run `cds watch`
 
-### Steps to deploy the application on CF
+#### Steps to deploy the application on CF
 
 1. Build the application
     `mbt build -p=cf `  
@@ -101,8 +109,11 @@ File / Folder | Purpose
 
    `cf deploy BusinessPartnerValidation_1.0.0.mtar`
 
-## Serverless application
+### Step 5: Build and deploy the serverless application
 - Steps to deploy the serverless application can be found [here](./serverlessQRCodeGenerator/README.md)
+
+### Step 6: Configure event based communication between S4 and enterprise messaging
+
 
 ## Demo script
 
