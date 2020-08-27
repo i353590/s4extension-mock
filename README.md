@@ -44,8 +44,6 @@ The Business Partner Validation application is developed using SAP Cloud Applica
 * [SQLite ](https://sqlite.org/download.html)
 * To build the multi target application, we need the [Cloud MTA Build tool](https://sap.github.io/cloud-mta-build-tool/), download the tool from [here](https://sap.github.io/cloud-mta-build-tool/download/)
 * For Windows system, install 'MAKE' from https://sap.github.io/cloud-mta-build-tool/makefile/
->Note: Please set the npm registry for @sap libraries using the command :  
-`npm set @sap:registry=https://npm.sap.com`
 * [multiapps plugin](https://github.com/cloudfoundry-incubator/multiapps-cli-plugin) - `cf install-plugin multiapps`  
 *  mbt -  `npm install -g mbt`
 
@@ -64,18 +62,6 @@ The application requires below set of SAP Cloud Platform Entitlements/Quota
 
 ## Configuration
 
-
-### Project Structure
-
-The project contains below folders and files
-
-File / Folder | Purpose
----------|----------
-`app/` | content for UI frontends go here
-`db/` | your domain models and data go here
-`srv/` | your service models and code go here
-`package.json` | project metadata and configuration
-`readme.md` | this getting started guide
 
 ### Step 1: [Setup Cloud platform subaccount](./documentation/mission/Prepare-Cloud-Platform/README.md)
 
