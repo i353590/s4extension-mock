@@ -8,13 +8,13 @@ This application showcases:
 - Building application on SAP Cloud Platform(CP) using [SAP Cloud Application Programming Model(CAP)](https://cap.cloud.sap/docs/)
 - Consuming Events from S/4 HANA on premise using [SAP CP Enterprise Messaging](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/df532e8735eb4322b00bfc7e42f84e8d.html)
 - Consuming REST API's from S/4 HANA on premise using SAP CP Connectivity Service
-- Building and deloying a function in [SAP Cloud platform Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html)
+- Building and deploying a function in [SAP Cloud platform Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html)
 
 ## Business Scenario
 
 A business scenario is used to showcase how to build a S/4 HANA on premise extension Application on SAP CP.
 
-John who is an employee of Business Partner Validation Firm iCredible, which is a third party vendor of ACME Corporation would like to get notifications whenever new Business Partners are added in the S/4 HANA backend system of ACME Corporation. John would then be able to review the Business Partner details in his extension app. He would proceed to visit the Business Partner’s registered office and do some background verification. John would then proceed to update/validate the verification details into the extension app. Once the details are verified, the Business Partner gets activated in the S/4 HANA system of ACME Corporation.
+John who is an employee of Business Partner Validation Firm iCredible, which is a third-party vendor of ACME Corporation would like to get notifications whenever new Business Partners are added in the S/4 HANA backend system of ACME Corporation. John would then be able to review the Business Partner details in his extension app. He would proceed to visit the Business Partner’s registered office and do some background verification. John would then proceed to update/validate the verification details into the extension app. Once the details are verified, the Business Partner gets activated in the S/4 HANA system of ACME Corporation.
 
 - Custom extension application that works independently from S/4 HANA.
 
@@ -30,7 +30,7 @@ John who is an employee of Business Partner Validation Firm iCredible, which is 
 
 ![solution diagram](./documentation/images/solution-diagram.jpg)
 
-The Business Partner Validation application is developed using SAP Cloud Application programming Model (CAP) and runs and runs on the SAP Cloud Platform Cloud Foundry Environment. It consumes platform services like Enterprise Messaging, SAP HANA and Connectivity. The events generated in S/4 HANA on preimse are inserted into the Enterprise messaging queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the HANA database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system. The Business Partner Validation App also places the processed events into a Enterprise Message Queue from where a Serverless Application consumes it and posts it back to S/4 HANA on premise system using odata provisioning.
+The Business Partner Validation application is developed using SAP Cloud Application programming Model (CAP) and runs and runs on the SAP Cloud Platform Cloud Foundry Environment. It consumes platform services like Enterprise Messaging, SAP HANA and Connectivity. The events generated in S/4 HANA on premise are inserted into the Enterprise messaging queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the HANA database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system. The Business Partner Validation App also places the processed events into a Enterprise Message Queue from where a Serverless Application consumes it and posts it back to S/4 HANA on premise system using OData provisioning.
 
 ## Requirements
 * S4 Hana on premise system.
@@ -51,7 +51,7 @@ The Business Partner Validation application is developed using SAP Cloud Applica
 
 ### Entitlements
 
-The application requires below set of SAP Cloud Platform Entitelements/Quota
+The application requires below set of SAP Cloud Platform Entitlements/Quota
 
 | Service                           | Plan       | Number of Instances |
 |-----------------------------------|------------|:-------------------:|
@@ -77,11 +77,11 @@ File / Folder | Purpose
 `package.json` | project metadata and configuration
 `readme.md` | this getting started guide
 
-### Step 1: Setup Cloud platform subaccount
+### Step 1: [Setup Cloud platform subaccount](./documentation/mission/Prepare-Cloud-Platform/README.md)
 
-### Step 2: S/4 HANA Enable oData Service for business partner
+### Step 2: [S/4 HANA Enable OData Service for business partner](./documentation/mission/configure-oData-Service/README.md)
 
-### Step 3: Setup connectivity between S4Hana system, SAP CP
+### Step 3: [Setup connectivity between S4Hana system, SAP CP](./documentation/mission/cloud-connector/README.md)
 
 ### Step 4: Build and deploy the CAP application
 
@@ -109,10 +109,9 @@ File / Folder | Purpose
 
    `cf deploy BusinessPartnerValidation_1.0.0.mtar`
 
-### Step 5: Build and deploy the serverless application
-- Steps to deploy the serverless application can be found [here](./serverlessQRCodeGenerator/README.md)
+### Step 5: [Build and deploy the serverless application](./serverlessQRCodeGenerator/README.md)
 
-### Step 6: Configure event based communication between S4 and enterprise messaging
+### Step 6: [Configure event based communication between S4 and enterprise messaging](https://help.sap.com/viewer/810dfd34f2cc4f39aa8d946b5204fd9c/1809.000/en-US/fbb2a5980cb54110a96d381e136e0dd8.html)
 
 
 ## Demo script
