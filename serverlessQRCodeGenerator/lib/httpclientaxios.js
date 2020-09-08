@@ -12,36 +12,36 @@ async function postImage(context, msg, event) {
             const destinationNameFromContext = await context.getSecretValueJSON('destination-name', 'name');
             const destinationName = destinationNameFromContext.name;
             const data = await util.readDetails(destination, destinationName, context, logger);
-            const response = await processBpPayload(data.authTokens[0].value, data.destinationConfiguration, event, msg);
+            const response = await processBpPayload(data.authTokens[0].value, data.destinationConfiguration, msg, destinationNameFromContext);
             return response;
         }catch(error){
             throw error;
         }
 }
 
-async function processBpPayload(accessToken, destinationConfiguration, event, msg) {
+async function processBpPayload(accessToken, destinationConfiguration, msg, destinationNameFromContext) {
         let bpDetails = msg.data;
-        if (bpDetails.verificationStatus === "PROCESS") {
-            bpDetails.searchTerm1 = "VERIFIED";
+        if (bpDetails.verificationStatus === "VERIFIED") {
+            bpDetails.searchTerm1 = bpDetails.verificationStatus;
             bpDetails.businessPartnerIsBlocked = false;
         } else {
             bpDetails.searchTerm1 = bpDetails.verificationStatus;
             bpDetails.businessPartnerIsBlocked = true;
         }
         try{
-            const headers = await fetchXsrfToken(destinationConfiguration, accessToken, bpDetails);
+            const headers = await fetchXsrfToken(destinationConfiguration, accessToken, bpDetails, destinationNameFromContext);
             if (bpDetails.addressModified) {
-                await updateBpAddress(destinationConfiguration, accessToken, headers, bpDetails);
-                await updateBp(destinationConfiguration, accessToken, headers, bpDetails);
+                await updateBpAddress(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext);
+                await updateBp(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext);
                 if(!bpDetails.businessPartnerIsBlocked){
-                    await postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails);
+                    await postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext);
                     return "SUCCESS";
                 }
                 return "SUCCESS"; 
             } else {
-                await updateBp(destinationConfiguration, accessToken, headers, bpDetails);
+                await updateBp(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext);
                 if(!bpDetails.businessPartnerIsBlocked){
-                    await postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails);
+                    await postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext);
                     return "SUCCESS";
                 }
                 return "SUCCESS";
@@ -52,15 +52,16 @@ async function processBpPayload(accessToken, destinationConfiguration, event, ms
         }
 }
 
-async function fetchXsrfToken(destinationConfiguration, accessToken, bpDetails) {
-        return await axios({
+async function fetchXsrfToken(destinationConfiguration, accessToken, bpDetails, destinationNameFromContext) {
+    const attachmentSrvApi = destinationNameFromContext.attachmentSrvApi;
+    return await axios({
             method: 'get',
-            url: destinationConfiguration.URL + "API_CV_ATTACHMENT_SRV/",
+            url: destinationConfiguration.URL + attachmentSrvApi + "/",
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'Image/png',
                 'Slug': bpDetails.businessPartner + ".png",
-                'BusinessObjectTypeName': 'BUS1006',
+                'BusinessObjectTypeName': destinationNameFromContext.businessObjectTypeName,
                 'LinkedSAPObjectKey': bpDetails.businessPartner,
                 'x-csrf-token': 'fetch'
             }
@@ -72,15 +73,16 @@ async function fetchXsrfToken(destinationConfiguration, accessToken, bpDetails) 
                 logger.info("Success - Fetching CSRF Token : ");
                 return headers;
         }).catch(error => {
-            logger.info("Error - Fetching CSRF token Error");
+            logger.info("Error - Fetching CSRF token Error", error);
             throw util.errorHandler(error, logger);
         });
 }
 
-async function updateBpAddress(destinationConfiguration, accessToken, headers, bpDetails) {
+async function updateBpAddress(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext) {
+        const businessPartnerSrvApi = destinationNameFromContext.businessPartnerSrvApi;
         return await axios({
             method: 'patch',
-            url: destinationConfiguration.URL + "API_BUSINESS_PARTNER/A_BusinessPartnerAddress(BusinessPartner='" + bpDetails.businessPartner + "',AddressID='" + bpDetails.addressId + "')",
+            url: destinationConfiguration.URL + businessPartnerSrvApi +"/A_BusinessPartnerAddress(BusinessPartner='" + bpDetails.businessPartner + "',AddressID='" + bpDetails.addressId + "')",
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -99,10 +101,11 @@ async function updateBpAddress(destinationConfiguration, accessToken, headers, b
         });
 }
 
-async function updateBp(destinationConfiguration, accessToken, headers, bpDetails) {
+async function updateBp(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext) {
+    const businessPartnerSrvApi = destinationNameFromContext.businessPartnerSrvApi;
        return await axios({
             method: 'patch',
-            url: destinationConfiguration.URL + "API_BUSINESS_PARTNER/A_BusinessPartner('" + bpDetails.businessPartner + "')",
+            url: destinationConfiguration.URL + businessPartnerSrvApi + "/A_BusinessPartner('" + bpDetails.businessPartner + "')",
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
@@ -121,18 +124,20 @@ async function updateBp(destinationConfiguration, accessToken, headers, bpDetail
         });
 }
 
-async function postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails) {
+async function postGeneratedImage(destinationConfiguration, accessToken, headers, bpDetails, destinationNameFromContext) {
+    const attachmentSrvApi = destinationNameFromContext.attachmentSrvApi;
+    const businessObjectTypeName = destinationNameFromContext.businessObjectTypeName;
             return await generateQRCode(bpDetails).then(async image =>{
                 const bp = bpDetails.businessPartner;
                 return await axios({
                     method: 'post',
-                    url: destinationConfiguration.URL + "API_CV_ATTACHMENT_SRV/AttachmentContentSet",
+                    url: destinationConfiguration.URL + attachmentSrvApi + "/AttachmentContentSet",
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'Image/jpg',
                         'Slug': bp + '.jpg',
-                        'BusinessObjectTypeName': 'BUS1006',
-                        'LinkedSAPObjectKey': '000' + bp,
+                        'BusinessObjectTypeName': businessObjectTypeName,
+                        'LinkedSAPObjectKey': bp,
                         'x-csrf-token': headers.token,
                         'Cookie': headers.cookie
                     },
