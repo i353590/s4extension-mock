@@ -137,7 +137,7 @@ async function postGeneratedImage(destinationConfiguration, accessToken, headers
                         'Content-Type': 'Image/jpg',
                         'Slug': bp + '.jpg',
                         'BusinessObjectTypeName': businessObjectTypeName,
-                        'LinkedSAPObjectKey': bp,
+                        'LinkedSAPObjectKey': '000' + bp,
                         'x-csrf-token': headers.token,
                         'Cookie': headers.cookie
                     },
