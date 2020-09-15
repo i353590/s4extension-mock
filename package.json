@@ -44,7 +44,7 @@
           "credentials": {
             "destination": "s4h-basic",
             "requestTimeout": 18000000,
-            "prefix": "refapps/s4ems/abc/S4H/BO"
+            "prefix": "refapps/bpems/abc/S4H/BO"
           }
         }
       },
