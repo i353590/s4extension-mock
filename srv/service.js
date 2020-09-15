@@ -4,7 +4,7 @@ module.exports = async srv => {
   const {BusinessPartnerAddress, Notifications, Addresses, BusinessPartner} = srv.entities;
   const bupaSrv = await cds.connect.to("API_BUSINESS_PARTNER");
   const messaging = await cds.connect.to('messaging')
-  const namespace = messaging.options.credentials.namespace
+  const namespace = messaging.options.credentials && messaging.options.credentials.namespace
 
   const {postcodeValidator} = require('postcode-validator');
   
