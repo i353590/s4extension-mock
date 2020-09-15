@@ -80,8 +80,7 @@ module.exports = async srv => {
     console.log("<< data to serverless >>>", result);
     console.log("<< formatted >>>>>", payload);
 
-    const msgTx = messaging.tx(req)
-    msgTx.emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
+    messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
   }
 
   
