@@ -10,4 +10,7 @@ applications:
         {"name": "srv-binding", "url":"https://businesspartnervalidation-srv-friendly-wolverine.cfapps.eu10.hana.ondemand.com", "forwardAuthToken": true}
       ]
   services:
-  - my-xsuaa
+  - BusinessPartnerValidation-db
+  - dest
+  - ems
+  - bp-uaa 

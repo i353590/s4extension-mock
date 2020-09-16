@@ -1,0 +1,30 @@
+service-values:
+  em-srv:
+    type: enterprise-messaging
+    instance: 7ebec50d-ab06-4c25-b491-06da94b0057e
+    key: emskey
+  destination-srv:
+    type: destination
+    instance: cc7223a3-91cf-469f-875c-efa5a5508c03
+    key: destkey
+secret-values:
+  destination-name:
+    name:
+      name: odataprov
+config-values:
+  amqp-service-config:
+    amqp:
+      incoming:
+        inp1:
+          sourceAddress: queue:refapps/bpems/abc/serverlessQueue
+          sndSettleMode: 0
+          rcvSettleMode: 0
+          maxLinkCredit: 50
+    bind:
+      rules:
+        - filter:
+            incoming: inp1
+          action:
+            function: qrcodegenerator
+            failure: accept
+            content: application/json
