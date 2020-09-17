@@ -42,7 +42,7 @@
         "model": "srv/external/API_BUSINESS_PARTNER",
         "[production]": {
           "credentials": {
-            "destination": "s4h-basic",
+            "destination": "bupa",
             "requestTimeout": 18000000
           }
         }
