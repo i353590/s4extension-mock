@@ -3,12 +3,15 @@
 module.exports = async srv => {
   const {BusinessPartnerAddress, Notifications, Addresses, BusinessPartner} = srv.entities;
   const bupaSrv = await cds.connect.to("API_BUSINESS_PARTNER");
+  const messaging = await cds.connect.to('messaging')
+  const namespace = messaging.options.credentials && messaging.options.credentials.namespace
+
   const {postcodeValidator} = require('postcode-validator');
   
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
-  bupaSrv.on("BusinessPartner/Created", async msg => {
+  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Created", async msg => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     // ID has prefix 000 needs to be removed to read address
@@ -24,7 +27,7 @@ module.exports = async srv => {
 
   });
 
-  bupaSrv.on("BusinessPartner/Changed", async msg => {
+  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
@@ -76,7 +79,8 @@ module.exports = async srv => {
     
     console.log("<< data to serverless >>>", result);
     console.log("<< formatted >>>>>", payload);
-    srv.emit("BusinessPartnerVerified", payload);
+
+    messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
   }
 
   
