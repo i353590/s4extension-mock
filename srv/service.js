@@ -11,7 +11,7 @@ module.exports = async srv => {
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
-  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Created", async msg => {
+  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Created", async (msg, next) => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     // ID has prefix 000 needs to be removed to read address
@@ -24,7 +24,7 @@ module.exports = async srv => {
     address.notifications_id=notificationObj.ID;
     const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
     console.log("Address inserted", result);
-
+    return next();
   });
 
   messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
@@ -37,10 +37,10 @@ module.exports = async srv => {
     console.log("<< BP marked verified >>")
   });
 
-  srv.after("UPDATE", "Notifications", data => {
+  srv.after("UPDATE", "Notifications", (data, req) => {
     console.log("Notification update", data.businessPartnerId);
     if(data.verificationStatus_code === "V" || data.verificationStatus_code === "INV")
-    emitEvent(data);
+    emitEvent(data, req);
   });
 
   srv.before("SAVE", "Notifications", req => {
@@ -62,7 +62,7 @@ module.exports = async srv => {
     return req.info({numericSeverity:1, target: 'postalCode'});  
   });
 
-  function emitEvent(result){
+  function emitEvent(result, req){
     // const result =  await cds.run(SELECT.one.from("my.businessPartnerValidation.Notification as N").leftJoin("my.businessPartnerValidation.Address as A").on({"N.businessPartnerId":"A.businessPartnerId"}).where("N.businessPartnerId", bp));
     const statusValues={"N":"NEW", "P":"PROCESS", "INV":"INVALID", "V":"VERIFIED"}
     // Format JSON as per serverless requires
