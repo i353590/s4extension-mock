@@ -11,7 +11,7 @@ module.exports = async srv => {
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
-  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Created", async (msg, next) => {
+  messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Created", async msg => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     // ID has prefix 000 needs to be removed to read address
@@ -23,8 +23,7 @@ module.exports = async srv => {
     const notificationObj = await cds.tx(msg).run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
     address.notifications_id=notificationObj.ID;
     const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
-    console.log("Address inserted", result);
-    return next();
+    console.log("Address inserted");
   });
 
   messaging.on("refapps/s4ems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
@@ -76,10 +75,8 @@ module.exports = async srv => {
       "country": result.addresses[0].country,
       "addressModified": result.addresses[0].isModified
     }
-    
-    console.log("<< data to serverless >>>", result);
-    console.log("<< formatted >>>>>", payload);
 
+    console.log("<< formatted >>>>>", payload);
     messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
   }
 
