@@ -141,7 +141,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 13. Go to the details page for the new BusinessPartner. Click on edit.
 ![edit bp](./documentation/images/editBP.png)
 
-14. Change the Verification Status to PROCESS. You can also edit the street name, postal code. Save the data. 
+14. Change the Verification Status to VERIFIED. You can also edit the street name, postal code also if needed. Save the data. 
 ![edit values](./documentation/images/editValue.png)
 
 15. Open S4 Hana system, bp transaction. Search for the newly created bp
@@ -157,8 +157,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 You can view this by clicking on the icon in the top left corner. You will have to give permission for downloading the image. 
 ![attachment List](./documentation/images/attachmentList.png)
 
-19. You can also notice that in the BusinessPartner Validation UI, the status is now set as Verified.
-![bp Status](./documentation/images/bpUIStatus.png)
+19. You can also notice that in the BusinessPartner Validation UI, the status is now set as COMPLETED.
 
 ## Known Issues
 
