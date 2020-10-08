@@ -20,17 +20,19 @@ module.exports = async srv => {
     const result = await cds.tx(msg).run(INSERT.into(Notifications).entries({businessPartnerId:BUSINESSPARTNER, verificationStatus_code:'N', businessPartnerName:bpEntity.businessPartnerName}));
     const address = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
     // for the address to notification association - extra field
-    const notificationObj = await cds.tx(msg).run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
-    address.notifications_id=notificationObj.ID;
-    const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
-    console.log("Address inserted");
+    if(address){
+      const notificationObj = await cds.tx(msg).run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
+      address.notifications_id=notificationObj.ID;
+      const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
+      console.log("Address inserted");
+    }
   });
 
   messaging.on("refapps/bpems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
     console.log("<< event caught", msg);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
-    if(bpIsAlive.verificationStatus_code == "V"){
+    if(bpIsAlive && bpIsAlive.verificationStatus_code == "V"){
       const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"C"}));
     }    
     console.log("<< BP marked verified >>")
