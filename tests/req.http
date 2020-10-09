@@ -3,7 +3,7 @@ POST http://localhost:4004/api-business-partner/A_BusinessPartner
 Content-Type: application/json
 
 {
-    "BusinessPartner":"17100005",
+    "BusinessPartner":"17100015",
     "BusinessPartnerIsBlocked":true,
     "BusinessPartnerFullName": "first lastname"
 }

@@ -71,11 +71,11 @@ module.exports = async srv => {
       "businessPartner": result.businessPartnerId,
       "businessPartnerName": result.businessPartnerName,
       "verificationStatus": statusValues[result.verificationStatus_code],
-      "addressId": result.addresses[0].addressId,
-      "streetName": result.addresses[0].streetName,
-      "postalCode": result.addresses[0].postalCode,
-      "country": result.addresses[0].country,
-      "addressModified": result.addresses[0].isModified
+      "addressId":  result.addresses && result.addresses[0].addressId,
+      "streetName":  result.addresses && result.addresses[0].streetName,
+      "postalCode":  result.addresses && result.addresses[0].postalCode,
+      "country":  result.addresses && result.addresses[0].country,
+      "addressModified":  result.addresses && result.addresses[0].isModified
     }
 
     console.log("<< formatted >>>>>", payload);
