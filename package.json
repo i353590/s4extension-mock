@@ -6,7 +6,6 @@
   "dependencies": {
     "@sap/audit-logging": "^3.1.0",
     "@sap/cds": "^4.2.3",
-    "@sap/cds-runtime": "^2.5.2",
     "@sap/hana-client": "^2.4.182",
     "@sap/xb-msg-amqp-v100": "^0.9.39",
     "@sap/xsenv": "^2.1.0",
@@ -38,7 +37,10 @@
           ]
         },
         "messaging": {
-          "kind": "enterprise-messaging"
+          "kind": "enterprise-messaging",
+          "queue": {
+            "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
+          } 
         }
       },
       "API_BUSINESS_PARTNER": {
