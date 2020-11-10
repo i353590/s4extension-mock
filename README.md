@@ -130,7 +130,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 ![name](./documentation/images/name.png)
 
 10. Provide the address
-![address](./documentation/images/address.png)
+![address](./documentation/images/bpaddress.png)
 
 11. Move to the status tab and check mark the 'Central Block' lock. Save the BP. This will create a new Business Partner 
 ![lock](./documentation/images/lock.png)
@@ -142,12 +142,13 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 ![edit bp](./documentation/images/editBP.png)
 
 14. Change the Verification Status to VERIFIED. You can also edit the street name, postal code also if needed. Save the data. 
+
 ![edit values](./documentation/images/editValue.png)
 
 15. Open S4 Hana system, bp transaction. Search for the newly created bp
 ![search bp](./documentation/images/searchBP.png)
 
-16. Click on the BP
+16.Double click on the BP
 ![click bp](./documentation/images/clickBP.png)
 
 17. You can see that the central Block lock has been removed 
@@ -155,6 +156,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 
 18. The serverless application has also uploaded a QR code for the address details of the BP to the S4Hana system. 
 You can view this by clicking on the icon in the top left corner. You will have to give permission for downloading the image. 
+
 ![attachment List](./documentation/images/attachmentList.png)
 
 19. You can also notice that in the BusinessPartner Validation UI, the status is now set as COMPLETED.
