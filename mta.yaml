@@ -109,3 +109,8 @@ resources:
      service: connectivity
      service-plan: lite
    type: org.cloudfoundry.managed-service
+ - name: BusinessPartnerValidation-logs
+   parameters:
+     service: application-logs
+     service-plan: lite
+   type: org.cloudfoundry.managed-service
