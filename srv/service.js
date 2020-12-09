@@ -16,7 +16,7 @@ module.exports = async srv => {
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
   messaging.on("refapps/bpems/abc/S4H/BO/BusinessPartner/Created", async msg => {
-    log.info("<< Create event caught", msg);
+    log.info(`<< Create event caught ${JSON.stringify(msg.data)}`);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     // ID has prefix 000 needs to be removed to read address
     log.info(BUSINESSPARTNER);
@@ -33,7 +33,7 @@ module.exports = async srv => {
   });
 
   messaging.on("refapps/bpems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
-    log.info("<< Change event caught", msg);
+    log.info(`<< Change event caught: ${JSON.stringify(msg.data)}`);
     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
     if(bpIsAlive && bpIsAlive.verificationStatus_code == "V"){
@@ -80,8 +80,16 @@ module.exports = async srv => {
       "country":  resultJoin.country,
       "addressModified":  resultJoin.isModified
     }
-    log.info("<< emit formatted >>>>>", payload);
-    messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
+    log.info(`<< emit formatted >>>>> ${JSON.stringify(payload)}`);
+    try{
+     let msg = await messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload);
+      log.info(`Message emitted to Queue ${msg}`);
+    }
+    catch(e){
+      log.info("Error in emit message: ");
+      log.error(e);
+    }
+    
   }
 
   
