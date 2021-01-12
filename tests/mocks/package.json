@@ -1,0 +1,45 @@
+{
+  "name": "mocks",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^4",
+    "express": "^4",
+    "sqlite3": "^5"
+  },
+  "devDependencies": {
+    "sqlite3": "^5"
+  },
+  "scripts": {
+    "start": "npx cds run --with-mocks --in-memory"
+  },
+  "cds": {
+    "requires": {
+      "messaging": {
+        "kind": "local-messaging",
+        "[production]": {
+          "kind": "enterprise-messaging",
+          "queue": {
+            "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
+          }
+        }
+      },
+      "[production]": {
+        "db": {
+          "kind": "hana",
+          "model": [
+            "db",
+            "srv"
+          ]
+        }
+      },
+      "API_BUSINESS_PARTNER": {
+        "kind": "odata",
+        "model": "srv/external/API_BUSINESS_PARTNER"
+      }
+    }
+  }
+}
