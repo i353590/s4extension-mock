@@ -21,10 +21,7 @@
       "messaging": {
         "kind": "local-messaging",
         "[production]": {
-          "kind": "enterprise-messaging",
-          "queue": {
-            "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
-          }
+          "kind": "enterprise-messaging"
         }
       },
       "[production]": {
