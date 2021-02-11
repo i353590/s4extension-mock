@@ -7,7 +7,7 @@ node{
 			 
 	 	sh '''
 	  		    rm -rf cloud-cap-s4ems-bp
-			    git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/I334088/cloud-cap-s4ems-bp.git -b pipeline
+			    git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/refapps/cloud-cap-s4ems-bp.git -b pipeline
 			    cd cloud-cap-s4ems-bp
 			    npm config set unsafe-perm true
 			    npm rm -g @sap/cds
@@ -89,7 +89,7 @@ node{
 		  		   
 		   sh'''
 		   rm -rf cloud-cap-s4ems-bp
-		   git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/I334088/cloud-cap-s4ems-bp.git -b pipeline
+		   git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/refapps/cloud-cap-s4ems-bp.git -b pipeline
 		   echo "Creating business partner"
 		   cd cloud-cap-s4ems-bp/build
 		   ls
@@ -156,7 +156,7 @@ node{
 		   
 		   sh '''
 	  		    rm -rf cloud-cap-s4ems-bp
-			    git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/I334088/cloud-cap-s4ems-bp.git -b pipeline
+			    git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/refapps/cloud-cap-s4ems-bp.git -b pipeline
 			    cd cloud-cap-s4ems-bp
 			    mv ./build/xs-security.json xs-security.json
 			    mbt build -p=cf
