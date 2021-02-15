@@ -17,12 +17,13 @@ node{
 		clientSecret = appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials.clientsecret
 
 		echo "clientId=  ${clientId}"
+		echo "clientSecret=  ${clientSecret}"
 		
-		// sh '''
-		// curl -X POST -d "client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials" https://referenceapps.authentication.eu10.hana.ondemand.com/oauth/token > oauth.json
-		//    ls
-		//    cat oauth.json
-		// '''
+		sh '''
+		curl -X POST -d "client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials" https://referenceapps.authentication.eu10.hana.ondemand.com/oauth/token > oauth.json
+		   ls
+		   cat oauth.json
+		'''
 		// setupCommonPipelineEnvironment script:this
 		// echo commonPipelineEnvironment
 		// echo commonPipelineEnvironment.configuration
