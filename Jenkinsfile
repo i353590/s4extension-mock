@@ -4,10 +4,10 @@
 node{
 	 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:latest' ) {
 	 stage ('Build') { 
-			 
+		deleteDir()
+      	checkout scm	 
 	 	sh '''
-	  		    rm -rf cloud-cap-s4ems-bp
-			    git clone https://329b7ba64125b54b25d22bbef289517c552e6454@github.tools.sap/refapps/cloud-cap-s4ems-bp.git -b pipeline
+	  		   
 			    cd cloud-cap-s4ems-bp
 			    npm config set unsafe-perm true
 			    npm rm -g @sap/cds
@@ -66,8 +66,8 @@ node{
 		 
 	  }
 	  
-	   stage('Undeploy'){
-		  emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'navin.krishnan.manohar@sap.com'
-	     }
+	//    stage('Undeploy'){
+	// 	  emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'navin.krishnan.manohar@sap.com'
+	//      }
 }
 } 
