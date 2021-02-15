@@ -19,7 +19,7 @@ node{
 		packageJson.cds.requires.API_BUSINESS_PARTNER["[production]"].credentials.destination = "bupa-mock"
 		writeJSON file: 'package.json', json: packageJson
 		sh "cat package.json"
-		sh "mbt build -p=cf"  
+		// sh "mbt build -p=cf"  
 		 
 	  }
 
