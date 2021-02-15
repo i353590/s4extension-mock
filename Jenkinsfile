@@ -8,7 +8,6 @@ node{
       	checkout scm	 
 	 	sh '''
 	  		    ls
-			    cd cloud-cap-s4ems-bp
 			    npm config set unsafe-perm true
 			    npm rm -g @sap/cds
 			    npm i -g @sap/cds-dk
