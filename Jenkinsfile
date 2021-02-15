@@ -24,7 +24,7 @@ node{
 	  }
 
 	  	stage('Deploy Mock'){
-	  	 
+			setupCommonPipelineEnvironment script:this
 		 	cloudFoundryDeploy script:this, deployTool:'cf_native', manifest: 'tests/mocks/gen/srv/manifest.yml'
 		  
 		  	
