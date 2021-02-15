@@ -75,6 +75,9 @@ node{
 		   ######################### Get Oauth token ##########################################################################
 		   
 		   curl -X POST -d "client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials" https://referenceapps.authentication.eu10.hana.ondemand.com/oauth/token > oauth.json
+		   """
+		   
+		   sh '''
 		   ls
 		   cat oauth.json
 		   echo 'Y' | apt-get install jq   
@@ -111,7 +114,7 @@ node{
 		    
 		    curl -X GET -H "Authorization: Bearer $access_token"  https://referenceappscf-cicd-s4ext-businesspartnervalidation-srv.cfapps.eu10.hana.ondemand.com/sales/Notifications
 		    
-		   """
+		   '''
 	     }
 	  
 	//    stage('Undeploy'){
