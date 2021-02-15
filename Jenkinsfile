@@ -16,7 +16,7 @@ node{
 			    mv ./build/manifest1.yml tests/mocks/gen/srv/manifest.yml
 			    '''
 		packageJson = readJSON file: 'package.json'
-		packageJson.cds.requires.API_BUSINESS_PARTNER.credentials.destination = "bupa-mock"
+		packageJson.cds.requires.API_BUSINESS_PARTNER["[production]"].credentials.destination = "bupa-mock"
 		writeJSON file: 'package.json', json: packageJson
 		sh "cat package.json"	   
 		 
