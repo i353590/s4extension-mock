@@ -19,12 +19,16 @@ node{
 		packageJson.cds.requires.API_BUSINESS_PARTNER["[production]"].credentials.destination = "bupa-mock"
 		writeJSON file: 'package.json', json: packageJson
 		sh "cat package.json"
-		mtaBuild script:this
-		sh "ls"
-		sh "cd mta_archives"
-		sh "ls"	   
+		sh "mbt build -p=cf"  
 		 
 	  }
+
+	  	stage('Deploy Mock'){
+	  	 
+		 	cloudFoundryDeploy script:this, deployTool:'cf_native', manifest: 'tests/mocks/gen/srv/manifest.yml'
+		  
+		  	
+              }
 
 	//    echo 'Y' | apt-get install jq    
 	// 		    jq '.+{"cds": {
