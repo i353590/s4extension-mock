@@ -14,6 +14,7 @@ node{
 			    cds build --production
 			    cd ../..
 			    mv ./build/manifest1.yml tests/mocks/gen/srv/manifest.yml
+				mv ./build/xs-security.json xs-security.json
 			    '''
 		packageJson = readJSON file: 'package.json'
 		packageJson.cds.requires.API_BUSINESS_PARTNER["[production]"].credentials.destination = "bupa-mock"
