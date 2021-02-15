@@ -13,8 +13,8 @@ node{
 			`cf curl /v2/apps/$appId/env > appEnv.json`
 		'''
 		appEnv = readJSON file: 'appEnv.json'
-		clientId = appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials.clientid
-		clientSecret = appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials.clientsecret
+		def clientId = appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials.clientid
+		def clientSecret = appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials.clientsecret
 
 		echo "clientId=  ${clientId}"
 		echo "clientSecret=  ${clientSecret}"
