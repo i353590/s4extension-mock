@@ -19,13 +19,14 @@ node{
 		packageJson.cds.requires.API_BUSINESS_PARTNER["[production]"].credentials.destination = "bupa-mock"
 		writeJSON file: 'package.json', json: packageJson
 		sh "cat package.json"
-		// sh "mbt build -p=cf"  
+		sh "mbt build -p=cf"  
 		 
 	  }
 
 	  	stage('Deploy Mock'){
 			setupCommonPipelineEnvironment script:this
-		 	cloudFoundryDeploy script:this, deployTool:'cf_native', cloudFoundry: [manifest: 'tests/mocks/gen/srv/manifest.yml']
+		 	// cloudFoundryDeploy script:this, deployTool:'cf_native', cloudFoundry: [manifest: 'tests/mocks/gen/srv/manifest.yml']
+			 cloudFoundryDeploy script:this, deployTool:'mtaDeployPlugin'
 		  
 		  	
               }
@@ -80,3 +81,7 @@ node{
 	//      }
 }
 } 
+
+def pushToCF(cfManifest){
+	cloudFoundryDeploy script:this, deployTool:'cf_native', cloudFoundry: [manifest: cfManifest]
+}
