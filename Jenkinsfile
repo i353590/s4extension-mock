@@ -8,7 +8,7 @@ node{
 		 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'pusercf', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 			sh 'cf login -a https://api.cf.eu10.hana.ondemand.com -u $USERNAME -p $PASSWORD -o referenceappscf -s CICD_s4ext'
 			def appId = sh returnStdout: true, script: "cf app BusinessPartnerValidation-srv --guid"
-			def appEnv = sh returnStdout: true, script: "cf curl /v2/apps/$appId/env"
+			def appEnv = sh returnStdout: true, script: "`cf curl /v2/apps/$appId/env`"
 			sh "echo $appEnv"
 		}
 		setupCommonPipelineEnvironment script:this
