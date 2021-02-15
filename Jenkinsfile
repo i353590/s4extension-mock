@@ -7,10 +7,13 @@ node{
 	 stage('Test') {
 		 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'pusercf', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 			sh 'cf login -a https://api.cf.eu10.hana.ondemand.com -u $USERNAME -p $PASSWORD -o referenceappscf -s CICD_s4ext'
-			def appId = sh returnStdout: true, script: "cf app BusinessPartnerValidation-srv --guid"
-			def appEnv = sh returnStdout: true, script: "`cf curl /v2/apps/$appId/env`"
-			sh "echo $appEnv"
 		}
+		sh '''
+			appId=`cf app BusinessPartnerValidation-srv --guid`
+			`cf curl /v2/apps/$appId/env > appEnv.json`
+		'''
+		appEnv = readJSON file: 'appEnv.json'
+		echo appEnv.system_env_json.VCAP_SERVICES.xsuaa[0].credentials
 		setupCommonPipelineEnvironment script:this
 		echo commonPipelineEnvironment
 		echo commonPipelineEnvironment.configuration
