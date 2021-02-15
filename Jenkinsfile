@@ -3,7 +3,8 @@
 
 node{
 	 dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:latest' ) {
-	 
+
+	try {
 	 stage ('Build') { 
 		deleteDir()
       	checkout scm	 
@@ -92,7 +93,7 @@ node{
 	     }
 	  
 	   stage('Redeploy'){
-		   	deleteDir()
+		   	sh "rm -rf ."
       		checkout scm
 		   sh '''
 			    mv ./build/xs-security.json xs-security.json
@@ -110,7 +111,14 @@ node{
 		   cf delete BusinessPartnerValidation-srv-mocks -f
 		   echo 'y' | cf undeploy BusinessPartnerValidation
 		   '''
-		  emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'navin.krishnan.manohar@sap.com'
+		 
 	     }
+	}
+	catch(e){
+		echo 'This will run only if failed'
+	}
+	finally {
+		 emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'navin.krishnan.manohar@sap.com'
+	}
 }
 } 
