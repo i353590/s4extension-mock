@@ -19,13 +19,13 @@ node{
 		echo "clientId=  ${clientId}"
 		echo "clientSecret=  ${clientSecret}"
 		
-		sh '''
+		sh """
 		echo $clientId
 		echo $clientSecret
-		curl -X POST -d "client_id=+clientId+&client_secret=+clientSecret+&grant_type=client_credentials" https://referenceapps.authentication.eu10.hana.ondemand.com/oauth/token > oauth.json
+		curl -X POST -d "client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials" https://referenceapps.authentication.eu10.hana.ondemand.com/oauth/token > oauth.json
 		   ls
 		   cat oauth.json
-		'''
+		"""
 		// setupCommonPipelineEnvironment script:this
 		// echo commonPipelineEnvironment
 		// echo commonPipelineEnvironment.configuration
