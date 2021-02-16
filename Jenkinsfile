@@ -93,7 +93,7 @@ node{
 	    // }
 	  
 	   	stage('Redeploy'){
-		   	sh "rm -rf .*"
+		   	sh "rm -rf *"
       		checkout scm
 		   	sh '''
 			    mv ./build/xs-security.json xs-security.json
