@@ -93,7 +93,7 @@ node{
 	     }
 	  
 	   stage('Redeploy'){
-		   	sh "rm -rf ."
+		   	sh "rm -rf .."
       		checkout scm
 		   sh '''
 			    mv ./build/xs-security.json xs-security.json
@@ -116,6 +116,7 @@ node{
 	}
 	catch(e){
 		echo 'This will run only if failed'
+		currentBuild.result = "FAILURE"
 	}
 	finally {
 		 emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'navin.krishnan.manohar@sap.com'
