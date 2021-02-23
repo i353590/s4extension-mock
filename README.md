@@ -1,5 +1,5 @@
 # S/4 HANA Extend Business Process Scenario
-
+[![Develop Build Status](https://gkerefappscicd.jaas-gcp.cloud.sap.corp/buildStatus/icon?job=cloud-cap-s4ems-bp)](https://gkerefappscicd.jaas-gcp.cloud.sap.corp/job/cloud-cap-s4ems-bp/)
 ## Description
 The main intent of this scenario is to complement an existing business process in an SAP solution – currently SAP S/4HANA with additional business process steps. This involves adding major logic and/or additional data and goes beyond simple UI changes.
 
