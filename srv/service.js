@@ -18,12 +18,13 @@ module.exports = async srv => {
   messaging.on(["refapps/bpems/abc/S4H/BO/BusinessPartner/Created", "refapps/bpems/abc/ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Created/v1"], async msg => {
     
     log.info(`<< Create event caught ${JSON.stringify(msg.data)}`);
-    if(msg.specversion == "1.0"){
+    let BUSINESSPARTNER = "";
+    if(msg.headers && msg.headers.specversion == "1.0"){
        //> Fix for 2020 on-premise
-       const BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
+      BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
     }
     else{
-      const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+      BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     }
       
     // ID has prefix 000 needs to be removed to read address
@@ -42,13 +43,14 @@ module.exports = async srv => {
 
   messaging.on(["refapps/bpems/abc/S4H/BO/BusinessPartner/Changed", "refapps/bpems/abc/ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Changed/v1"], async msg => {
     log.info(`<< Change event caught: ${JSON.stringify(msg.data)}`);
-    if(msg.specversion == "1.0"){
-      //> Fix for 2020 on-premise
-      const BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
-   }
-   else{
-     const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
-   }
+    let BUSINESSPARTNER=""
+    if(msg.headers && msg.headers.specversion == "1.0"){
+       //> Fix for 2020 on-premise
+        BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
+    }
+    else{
+       BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+    }
     const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
     if(bpIsAlive && bpIsAlive.verificationStatus_code == "V"){
       const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"C"}));
