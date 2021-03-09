@@ -25,7 +25,7 @@
     "jest": "*"
   },
   "cds": {
-    "hana": {
+    "--hana": {
       "deploy-format": "hdbtable"
     },
     "requires": {
