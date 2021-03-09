@@ -7,15 +7,28 @@ module.exports = async srv => {
   const namespace = messaging.options.credentials && messaging.options.credentials.namespace
 
   const {postcodeValidator} = require('postcode-validator');
+  const log = require('cf-nodejs-logging-support');
+
+  const app = cds.app;
+  app.use(log.logNetwork);
   
   srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
   srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
 
-  messaging.on("refapps/bpems/abc/S4H/BO/BusinessPartner/Created", async msg => {
-    console.log("<< event caught", msg);
-    const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+  messaging.on(["refapps/bpems/abc/S4H/BO/BusinessPartner/Created", "refapps/bpems/abc/ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Created/v1"], async msg => {
+    
+    log.info(`<< Create event caught ${JSON.stringify(msg.data)}`);
+    let BUSINESSPARTNER = "";
+    if(msg.headers && msg.headers.specversion == "1.0"){
+       //> Fix for 2020 on-premise
+      BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
+    }
+    else{
+      BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+    }
+      
     // ID has prefix 000 needs to be removed to read address
-    console.log(BUSINESSPARTNER);
+    log.info(BUSINESSPARTNER);
     const bpEntity = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartner).where({businessPartnerId: BUSINESSPARTNER}));
     const result = await cds.tx(msg).run(INSERT.into(Notifications).entries({businessPartnerId:BUSINESSPARTNER, verificationStatus_code:'N', businessPartnerName:bpEntity.businessPartnerName}));
     const address = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
@@ -24,23 +37,28 @@ module.exports = async srv => {
       const notificationObj = await cds.tx(msg).run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
       address.notifications_id=notificationObj.ID;
       const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
-      console.log("Address inserted");
+      log.info("Address inserted");
     }
   });
 
-  messaging.on("refapps/bpems/abc/S4H/BO/BusinessPartner/Changed", async msg => {
-    console.log("<< event caught", msg);
-    const BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+  messaging.on(["refapps/bpems/abc/S4H/BO/BusinessPartner/Changed", "refapps/bpems/abc/ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Changed/v1"], async msg => {
+    log.info(`<< Change event caught: ${JSON.stringify(msg.data)}`);
+    let BUSINESSPARTNER=""
+    if(msg.headers && msg.headers.specversion == "1.0"){
+       //> Fix for 2020 on-premise
+        BUSINESSPARTNER = (+(msg.data.BusinessPartner)).toString();
+    }
+    else{
+       BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
+    }
     const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
     if(bpIsAlive && bpIsAlive.verificationStatus_code == "V"){
       const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"C"}));
     }    
-    console.log("<< BP marked verified >>")
+    log.info("<< BP marked verified >> ")
   });
 
   srv.after("UPDATE", "Notifications", (data, req) => {
-    console.log("Notification update", data.businessPartnerId);
-    console.log("After update data: ", data);
     if(data.verificationStatus_code === "V" || data.verificationStatus_code === "INV")
     emitEvent(data, req);
   });
@@ -78,8 +96,16 @@ module.exports = async srv => {
       "country":  resultJoin.country,
       "addressModified":  resultJoin.isModified
     }
-    console.log("<< formatted >>>>>", payload);
-    messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload)
+    log.info(`<< emit formatted >>>>> ${JSON.stringify(payload)}`);
+    try{
+     let msg = await messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload);
+      log.info(`Message emitted to Queue ${msg}`);
+    }
+    catch(e){
+      log.info("Error in emit message: ");
+      log.error(e);
+    }
+    
   }
 
   
