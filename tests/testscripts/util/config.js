@@ -1,9 +1,9 @@
-const cred =  require("./localSample");
+const cred =  require("./appEnv");
 const vcap = cred.system_env_json.VCAP_SERVICES;
 const appenv = cred.application_env_json.VCAP_APPLICATION;
 const topicName = "refapps/bpems/abc/BusinessPartnerValidation-srv/1234";
 let mockserverurl = appenv.application_uris[0].split(".");
-mockserverurl[0] = "https://businesspartnervalidation-srv-mocks1";
+mockserverurl[0] = "businesspartnervalidation-srv-mocks";
 mockserverurl = mockserverurl.join(".");
 module.exports = {
     "token_url": vcap.xsuaa[0].credentials.url + '/oauth/token',
@@ -20,6 +20,6 @@ module.exports = {
         "client_secret": vcap.xsuaa[0].credentials.clientsecret
     },
     "mock": {
-        "url":mockserverurl +"/"
+        "url": "https://" + mockserverurl +"/"
     }
 }
