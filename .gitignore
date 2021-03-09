@@ -23,4 +23,5 @@ mta_archives/
 *.log
 
 #local Secrets
-tests/testscripts/util/localSample.js
+
+localSample.js
