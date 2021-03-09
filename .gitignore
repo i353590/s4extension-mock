@@ -21,3 +21,6 @@ mta_archives/
 .DS_Store
 *.orig
 *.log
+
+#local Secrets
+tests/testscripts/util/localSample.js
