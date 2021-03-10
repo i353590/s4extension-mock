@@ -12,7 +12,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100068",
+    "BusinessPartner": "17100070",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "black knight"
 };
@@ -32,7 +32,7 @@ describe("Validate Notification Status Change", () => {
             testObject.ID = data.data.value[0].ID;
             expect(data.data.value[0]).toMatchObject(object);
         });
-    },5000);
+    },10000);
 
     test(`Notification For Business Partner Creation Recieved`, () => {
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
