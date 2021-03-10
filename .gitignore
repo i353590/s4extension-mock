@@ -25,3 +25,4 @@ mta_archives/
 #local Secrets
 
 localSample.js
+appEnv.json
