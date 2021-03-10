@@ -16,7 +16,7 @@ const createNotification = async (payload) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            data: JSON.stringify(payload)
+            data: payload
         };
         return await axios(options);
     } catch (error) {
