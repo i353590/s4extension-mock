@@ -40,8 +40,7 @@ node{
 				sh '''
 					appId=`cf app BusinessPartnerValidation-srv --guid`
 					`cf curl /v2/apps/$appId/env > tests/testscripts/util/appEnv.json`
-					cd tests
-					npm install
+					npm install --only=dev
 					npm test
 				'''
 			}

@@ -22,7 +22,8 @@
   },
   "devDependencies": {
     "sqlite3": "^4.1.1",
-    "jest": "*"
+    "jest": "*",
+    "axios": "^0.21.1"
   },
   "cds": {
     "--hana": {
