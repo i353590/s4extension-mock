@@ -12,7 +12,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100089",
+    "BusinessPartner": "17100090",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -29,8 +29,8 @@ describe("Validate Notification Status Change", () => {
         let object = { "businessPartnerId": payload.BusinessPartner };
         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
             console.log("1 ===", data.data);
-            testObject.ID = data.data.value[0].ID;
-            expect(data.data.value).toMatchObject([object]);
+            testObject.ID = (data.data.value.filter(a=>a.verificationStatus_code=="N"))[0].ID;
+            expect(data.data.value.length >=1).toBeTruthy();
         });
     });
 

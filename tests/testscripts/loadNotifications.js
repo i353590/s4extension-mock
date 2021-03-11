@@ -24,7 +24,7 @@ const loadNotifications = async (id, isBPSearch, bpId) => {
         if (isBPSearch) {
             endpoint = `sales/Notifications?$filter=(businessPartnerId eq '${bpId}')`;
         } else {
-            endpoint = id ? `sales/Notifications(ID=${id},IsActiveEntity=true)` : "sales/Notifications?$top=11";
+            endpoint = id ? `sales/Notifications(ID=${id},IsActiveEntity=true)` : "sales/Notifications?$top=1";
         }
         let options = {
             url: `${baseUrl}${endpoint}`,
