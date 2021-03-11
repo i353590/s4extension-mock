@@ -29,15 +29,13 @@ describe("Validate Notification Status Change", () => {
     test("Notification recieved in BP", () => {
         let object = { "businessPartnerId": payload.BusinessPartner };
         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-            console.log("1 ===", data.data);
-            testObject.ID = (data.data.value.filter(a=>a.verificationStatus_code=="N"))[0].ID;
-            expect(data.data.value.length >=1).toBeTruthy();
+            testObject.ID = data.data.value[0].ID;
+            expect(data.data.value).toMatchObject([object]);
         });
     });
 
     test(`Notification For Business Partner Creation Recieved`, () => {
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
-            console.log("2 ===", data.data);
             expect(data.data).toMatchObject(testObject);
         });
     });
@@ -68,7 +66,7 @@ describe("Validate Notification Status Change", () => {
         })
     });
 
-    test("Notifications Status Change Verification", () => {
+    test("Notifications Status Change to Verified", () => {
         let returnFormat = { "verificationStatus_code": 'V' };
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
             expect(data.data).toMatchObject(returnFormat);
@@ -81,11 +79,12 @@ describe("Change Business Partner Locked Status", () => {
     beforeAll(() => {
         return verifyStatus.mockStatusChangeEvent(payload.BusinessPartner);
     });
-    test("Notifications Status Change Verification", () => {
+    test("Notifications Status Change to Confirmed", () => {
         let returnFormat = { "verificationStatus_code": "C" };
         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-            console.log("3 ===", data.data);
-            expect(data.data.value[0]).toMatchObject(returnFormat);
+            console.log("verificationStatus_code", data.data);
+            let temp = data.data.filter((e)=>e.verificationStatus_code === "C");
+            expect(temp.length).toBe(1);
         });
     }, 10000);
 });
