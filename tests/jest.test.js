@@ -18,13 +18,20 @@ var payload = {
 };
 var token;
 var testObject = {};
-describe("Validate Notification Status Change", () => {
-    beforeAll(() => {
-        createNotification.createNotification(payload);
-        tokenGenerator.generateToken().then(bearerToken => {
-            token = "Bearer " + bearerToken.data.access_token;
-        });
+
+beforeAll(() => {
+    createNotification.createNotification(payload);
+    tokenGenerator.generateToken().then(bearerToken => {
+        token = "Bearer " + bearerToken.data.access_token;
     });
+});
+describe("Validate Notification Status Change", () => {
+    // beforeAll(() => {
+    //     createNotification.createNotification(payload);
+    //     tokenGenerator.generateToken().then(bearerToken => {
+    //         token = "Bearer " + bearerToken.data.access_token;
+    //     });
+    // });
     // test("Notification recieved in BP", () => {
     //     let object = { "businessPartnerId": payload.BusinessPartner };
     //     return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
