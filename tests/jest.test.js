@@ -12,7 +12,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100092",
+    "BusinessPartner": "17100094",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -32,14 +32,14 @@ describe("Validate Notification Status Change", () => {
     //         token = "Bearer " + bearerToken.data.access_token;
     //     });
     // });
-    // test("Notification recieved in BP", () => {
-    //     let object = { "businessPartnerId": payload.BusinessPartner };
-    //     return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-    //         console.log("1 ===", data.data);
-    //         testObject.ID = data.data.value[0].ID;
-    //         expect(data.data.value).toMatchObject([object]);
-    //     });
-    // });
+    test("Notification recieved in BP", () => {
+        let object = { "businessPartnerId": payload.BusinessPartner };
+        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+            console.log("1 ===", data.data);
+            testObject.ID = data.data.value[0].ID;
+            expect(data.data.value).toMatchObject([object]);
+        });
+    });
 
     // test(`Notification For Business Partner Creation Recieved`, () => {
     //     return loadNotifications.loadNotifications(testObject.ID).then(data => {
@@ -83,16 +83,16 @@ describe("Validate Notification Status Change", () => {
 
 });
 
-describe("Notification Recieved in BP", () => {
-    test("Notification recieved in BP", () => {
-        let object = { "businessPartnerId": payload.BusinessPartner };
-        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-            console.log("1 ===", data.data);
-            testObject.ID = (data.data.value.filter(a=>a.verificationStatus_code=="N"))[0].ID;
-            expect(data.data.value.length >=1).toBeTruthy();
-        });
-    });
-});
+// describe("Notification Recieved in BP", () => {
+//     test("Notification recieved in BP", () => {
+//         let object = { "businessPartnerId": payload.BusinessPartner };
+//         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+//             console.log("1 ===", data.data);
+//             testObject.ID = (data.data.value.filter(a=>a.verificationStatus_code=="N"))[0].ID;
+//             expect(data.data.value.length >=1).toBeTruthy();
+//         });
+//     });
+// });
 
 describe("Notification for BP Creation", () => {
     test(`Notification For Business Partner Creation Recieved`, () => {
