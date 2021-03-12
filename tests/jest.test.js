@@ -13,7 +13,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000103",
+    "BusinessPartner": "171000104",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -146,7 +146,7 @@ describe("Change Business Partner Locked Status", () => {
         let returnFormat = { "verificationStatus_code": "C" };
         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
             console.log("verificationStatus_code", data.data);
-            let temp = data.data.filter((e) => e.verificationStatus_code === "C");
+            let temp = data.data.value.filter((e) => e.verificationStatus_code === "C");
             expect(temp.length).toBe(1);
         });
     });
