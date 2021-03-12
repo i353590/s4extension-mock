@@ -13,34 +13,36 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100100",
+    "BusinessPartner": "17100101",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
+
 var token;
 var testObject = {};
+beforeAll(() => {
+    createNotification.createNotification(payload);
+    tokenGenerator.generateToken().then(bearerToken => {
+        token = "Bearer " + bearerToken.data.access_token;
+    });
+ 
+});
 describe("Validate Notification Status Change", () => {
-    beforeAll(() => {
-        createNotification.createNotification(payload);
-        tokenGenerator.generateToken().then(bearerToken => {
-            token = "Bearer " + bearerToken.data.access_token;
-        });
+    
+    test("Notification recieved in BP", () => {
         let object = { "businessPartnerId": payload.BusinessPartner };
-        loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
             console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
             testObject.ID = data.data.value[0].ID;
             expect(data.data.value).toMatchObject([object]);
         });
     });
-    // test("Notification recieved in BP", () => {
-    //     let object = { "businessPartnerId": payload.BusinessPartner };
-    //     return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-    //         console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
-    //         testObject.ID = data.data.value[0].ID;
-    //         expect(data.data.value).toMatchObject([object]);
-    //     });
-    // });
-
+//    let object = { "businessPartnerId": payload.BusinessPartner };
+//         loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+//             console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
+//             testObject.ID = data.data.value[0].ID;
+//             expect(data.data.value).toMatchObject([object]);
+//         });
     test(`Notification For Business Partner Creation Recieved`, () => {
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
             expect(data.data).toMatchObject(testObject);
