@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "npx cds run",
-    "test": "jest jest --runInBand"
+    "test": "jest jest --runInBand --clearCache"
   },
   "devDependencies": {
     "sqlite3": "^4.1.1",
