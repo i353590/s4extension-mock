@@ -13,7 +13,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100099",
+    "BusinessPartner": "17100100",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -25,15 +25,21 @@ describe("Validate Notification Status Change", () => {
         tokenGenerator.generateToken().then(bearerToken => {
             token = "Bearer " + bearerToken.data.access_token;
         });
-    });
-    test("Notification recieved in BP", () => {
         let object = { "businessPartnerId": payload.BusinessPartner };
-        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+        loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
             console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
             testObject.ID = data.data.value[0].ID;
             expect(data.data.value).toMatchObject([object]);
         });
     });
+    // test("Notification recieved in BP", () => {
+    //     let object = { "businessPartnerId": payload.BusinessPartner };
+    //     return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+    //         console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
+    //         testObject.ID = data.data.value[0].ID;
+    //         expect(data.data.value).toMatchObject([object]);
+    //     });
+    // });
 
     test(`Notification For Business Partner Creation Recieved`, () => {
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
