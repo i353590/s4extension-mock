@@ -13,11 +13,10 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "17100101",
+    "BusinessPartner": "171000103",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
-
 var token;
 var testObject = {};
 beforeAll(() => {
@@ -25,24 +24,17 @@ beforeAll(() => {
     tokenGenerator.generateToken().then(bearerToken => {
         token = "Bearer " + bearerToken.data.access_token;
     });
- 
-});
+},10000);
 describe("Validate Notification Status Change", () => {
-    
     test("Notification recieved in BP", () => {
         let object = { "businessPartnerId": payload.BusinessPartner };
         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-            console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
+            console.log(">>>>>>>>>>>>>>>>>> BP",data)
             testObject.ID = data.data.value[0].ID;
             expect(data.data.value).toMatchObject([object]);
         });
     });
-//    let object = { "businessPartnerId": payload.BusinessPartner };
-//         loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-//             console.log(">>>>>>>>>>>>>>>>>> BP ID should be there",data);
-//             testObject.ID = data.data.value[0].ID;
-//             expect(data.data.value).toMatchObject([object]);
-//         });
+
     test(`Notification For Business Partner Creation Recieved`, () => {
         return loadNotifications.loadNotifications(testObject.ID).then(data => {
             expect(data.data).toMatchObject(testObject);
@@ -95,7 +87,7 @@ describe("Change Business Partner Locked Status", () => {
             let temp = data.data.filter((e)=>e.verificationStatus_code === "C");
             expect(temp.length).toBe(1);
         });
-    }, 10000);
+    });
 });
 
 describe("Clean up", () => {

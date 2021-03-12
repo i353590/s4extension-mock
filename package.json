@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "npx cds run",
-    "test": "jest jest --ci"
+    "test": "jest jest --debug -i"
   },
   "devDependencies": {
     "sqlite3": "^4.1.1",
