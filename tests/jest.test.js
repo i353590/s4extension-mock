@@ -13,7 +13,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000104",
+    "BusinessPartner": "171000105",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
