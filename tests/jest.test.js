@@ -14,7 +14,7 @@ test("Notifications are loaded", () => {
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000112",
+    "BusinessPartner": "171000113",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -160,7 +160,7 @@ describe("Change Business Partner Locked Status", () => {
             expect(temp.length).toBe(1);
         });
     });
-});
+}, 10000);
 
 // describe("Clean up", () => {
 

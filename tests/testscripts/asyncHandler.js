@@ -1,10 +1,11 @@
 
 const loadNotificationChange = require("./changeNotificationStatus");
 const createNotification = require("./createNotification");
+const loadNotifications = require("./loadNotifications")
 const testObject = {};
 const handleBP = async (payload, token) => {
     await createNotification.createNotification(payload).then(data => {
-         loadNotificationChange.loadNotifications(false, true, payload.BusinessPartner).then(notificationId => {
+        loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(notificationId => {
             console.log(notificationId);
             testObject.ID = notificationId.data.value[0].ID;
              loadNotificationChange.enableDraft(testObject.ID, token).then(data1 => {
