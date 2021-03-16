@@ -9,11 +9,11 @@ const createAndUpdateBP = require("./testscripts/asyncHandler");
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000131",
+    "BusinessPartner": "171000136",
     "BusinessPartnerIsBlocked": true,
-    "BusinessPartnerFullName": "dark knight"
+    "BusinessPartnerFullName": "Black Magic"
 };
-
+jest.setTimeout(30000);
 var token;
 var testObject = {};
 beforeAll(async () => {
@@ -21,7 +21,7 @@ beforeAll(async () => {
     return tokenGenerator.generateToken().then(bearerToken => {
         token = "Bearer " + bearerToken.data.access_token;
     });
-});
+},10000);
 
 test("Notifications are loaded", async () => {
   return  loadNotifications.loadNotifications().then(data => {
