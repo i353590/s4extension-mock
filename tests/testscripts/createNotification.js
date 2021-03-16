@@ -20,7 +20,7 @@ const createNotification = async (payload) => {
         };
         return await axios(options);
     } catch (error) {
-        console.error(error);
+        console.error(error.data);
         throw (error);
     }
 }
