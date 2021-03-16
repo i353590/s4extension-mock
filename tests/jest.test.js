@@ -9,7 +9,7 @@ const createAndUpdateBP = require("./testscripts/asyncHandler");
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000121",
+    "BusinessPartner": "171000131",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "dark knight"
 };
@@ -17,15 +17,14 @@ var payload = {
 var token;
 var testObject = {};
 beforeAll(async () => {
-    await createNotification.createNotification(payload);
-    await tokenGenerator.generateToken().then(bearerToken => {
+     createNotification.createNotification(payload);
+    return tokenGenerator.generateToken().then(bearerToken => {
         token = "Bearer " + bearerToken.data.access_token;
     });
 });
 
-test("Notifications are loaded", () => {
-    expect.assertions(1);
-    loadNotifications.loadNotifications().then(data => {
+test("Notifications are loaded", async () => {
+  return  loadNotifications.loadNotifications().then(data => {
         expect(data.status).toBe(200);
     });
 });
@@ -37,70 +36,69 @@ test("Notifications are loaded", () => {
 //         console.log(data);
 //         expect(data.status).toBe(201);
 //     });
-// },15000);
+// });
 // });
 
-// describe("A",  () => {
-//     test("Notification recieved in BP", async() => {
-//         let object = { "businessPartnerId": payload.BusinessPartner };
-//         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-//             console.log(">>>>>>>>>>>>>>>>>> BP", data)
-//             testObject.ID = data.data.value[0].ID;
-//             expect(data.data.value).toMatchObject([object]);
-//         });
-//     });
-// });
-// describe("B",  () => {
-//     test(`Notification For Business Partner Creation Recieved`,async () => {
-//         return loadNotifications.loadNotifications(testObject.ID).then(data => {
-//             expect(data.data).toMatchObject(testObject);
-//         });
-//     });
-// });
-// describe("C",  () => {
-//     test("Enable Draft",async () => {
-//         return loadNotificationChange.enableDraft(testObject.ID, token).then(data => {
-//             expect(data.status).toBe(201);
-//         });
-//     });
-// });
-// describe("D",  () => {
-//     test("Check Stored Draft", async() => {
-//         return loadNotificationChange.checkStoredDraft(testObject.ID, token).then(data => {
-//             expect(data.status).toBe(200);
-//         });
-//     });
-// });
-// describe("E", () => {
-//     test("Check Stored Draft Status", async() => {
-//         return loadNotificationChange.checkDraftStatus(testObject.ID, token).then(data => {
-//             expect(data.status).toBe(200);
-//         })
-//     });
-// });
-// describe("F", () => {
-//     test("Check Side Effects", async () => {
-//         return loadNotificationChange.checkSideEffects(testObject.ID, token).then(data => {
-//             expect(data.status).toBe(200);
-//         })
-//     });
-// });
-// describe("G", () => {
-//     test("Change Notification Status", async () => {
-//         return loadNotificationChange.publishDraft(testObject.ID, token).then(data => {
-//             expect(data.status).toBe(201);
-//         })
-//     });
-// });
-// describe("H", () => {
-//     test("Notifications Status Change to Verified", async () => {
-//         let returnFormat = { "verificationStatus_code": 'V' };
-//         return loadNotifications.loadNotifications(testObject.ID).then(data => {
-//             expect(data.data).toMatchObject(returnFormat);
-//         });
-//     });
+describe("A",  () => {
+    test("Notification recieved in BP", async () => {
+        let object = { "businessPartnerId": payload.BusinessPartner };
+        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+            testObject.ID = data.data.value[0].ID;
+             expect(data.data.value).toMatchObject([object]);
+        });
+    });
+});
+describe("B",  () => {
+    test(`Notification For Business Partner Creation Recieved`,async () => {
+        return loadNotifications.loadNotifications(testObject.ID).then(data => {
+            expect(data.data).toMatchObject(testObject);
+        });
+    });
+});
+describe("C",  () => {
+    test("Enable Draft",async () => {
+        return loadNotificationChange.enableDraft(testObject.ID, token).then(data => {
+            expect(data.status).toBe(201);
+        });
+    });
+});
+describe("D",  () => {
+    test("Check Stored Draft", async() => {
+        return loadNotificationChange.checkStoredDraft(testObject.ID, token).then(data => {
+            expect(data.status).toBe(200);
+        });
+    });
+});
+describe("E", () => {
+    test("Check Stored Draft Status", async() => {
+        return loadNotificationChange.checkDraftStatus(testObject.ID, token).then(data => {
+            expect(data.status).toBe(200);
+        })
+    });
+});
+describe("F", () => {
+    test("Check Side Effects", async () => {
+        return loadNotificationChange.checkSideEffects(testObject.ID, token).then(data => {
+            expect(data.status).toBe(200);
+        })
+    });
+});
+describe("G", () => {
+    test("Change Notification Status", async () => {
+        return loadNotificationChange.publishDraft(testObject.ID, token).then(data => {
+            expect(data.status).toBe(201);
+        })
+    });
+});
+describe("H", () => {
+    test("Notifications Status Change to Verified", async () => {
+        let returnFormat = { "verificationStatus_code": 'V' };
+        return loadNotifications.loadNotifications(testObject.ID).then(data => {
+            expect(data.data).toMatchObject(returnFormat);
+        });
+    });
 
-// });
+});
 
 // describe("Validate Notification Status Change", () => {
 //     // test("Notification recieved in BP", () => {
@@ -153,25 +151,25 @@ test("Notifications are loaded", () => {
 
 // });
 
-// describe("Change Business Partner Locked Status", () => {
-//     beforeAll(async () => {
-//         return verifyStatus.mockStatusChangeEvent(payload.BusinessPartner);
-//     });
-//     test("Notifications Status Change to Confirmed", async () => {
-//         let returnFormat = { "verificationStatus_code": "C" };
-//         return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
-//             console.log("verificationStatus_code", data.data);
-//             let temp = data.data.value.filter((e) => e.verificationStatus_code === "C");
-//             expect(temp.length).toBe(1);
-//         });
-//     });
-// }, 15000);
+describe("Change Business Partner Locked Status", () => {
+    beforeAll(async () => {
+        return verifyStatus.mockStatusChangeEvent(payload.BusinessPartner);
+    });
+    test("Notifications Status Change to Confirmed", async () => {
+        let returnFormat = { "verificationStatus_code": "C" };
+        return loadNotifications.loadNotifications(false, true, payload.BusinessPartner).then(data => {
+            console.log("verificationStatus_code", data.data);
+            let temp = data.data.value.filter((e) => e.verificationStatus_code === "C");
+            expect(temp.length).toBe(1);
+        });
+    });
+}, 15000);
 
-// describe("Clean up", () => {
+describe("Clean up", () => {
 
-//     test("Delete the created Notifications", () => {
-//         return deleteNotifications.deleteNotification(token, testObject).then(data => {
-//             expect(data.status).toBe(204);
-//         });
-//     });
-// });
+    test("Delete the created Notifications", () => {
+        return deleteNotifications.deleteNotification(token, testObject).then(data => {
+            expect(data.status).toBe(204);
+        });
+    });
+});
