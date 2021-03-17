@@ -9,7 +9,7 @@ const createAndUpdateBP = require("./testscripts/asyncHandler");
 
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-    "BusinessPartner": "171000137",
+    "BusinessPartner": "171000139",
     "BusinessPartnerIsBlocked": true,
     "BusinessPartnerFullName": "Black Magic"
 };
