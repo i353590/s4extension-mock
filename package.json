@@ -18,12 +18,15 @@
   },
   "scripts": {
     "start": "npx cds run",
-    "test": "jest --runInBand jest"
+    "test": "mocha tests/mocha.test.js"
   },
   "devDependencies": {
-    "sqlite3": "^4.1.1",
+    "axios": "^0.21.1",
     "jest": "*",
-    "axios": "^0.21.1"
+    "mocha": "^8.3.2",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "sqlite3": "^4.1.1"
   },
   "cds": {
     "--hana": {
