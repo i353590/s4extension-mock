@@ -1,6 +1,6 @@
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-  "BusinessPartner": "171000205",
+  "BusinessPartner": "171000234",
   "BusinessPartnerIsBlocked": true,
   "BusinessPartnerFullName": "Black Dog"
 };
@@ -9,7 +9,6 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const config = require("./testscripts/util/config");
 let xsuaa_access_token;
-let arr;
 let BPNotificationID;
 chai.use(chaiHttp);
 chai.should();
@@ -65,17 +64,154 @@ describe("BP is created and Notification is recieved", () => {
 
 describe("Load Created BP ", () => {
   it(`Load BP ${payload.BusinessPartner}`, (done) => {
-    chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`).set('Authorization', 'bearer ' + xsuaa_access_token).end((err, response) => {
-      try {
-        response.body.value.should.have.lengthOf(1);
-        BPNotificationID = response.body.value[0].ID
-        console.info(BPNotificationID);
-        done();
-      } catch (err) {
-        console.error(err);
-        done(err)
-      }
-    });
+    chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`)
+      .set('Authorization', 'bearer ' + xsuaa_access_token).end((err, response) => {
+        try {
+          //response.body.value.should.have.lengthOf(1);
+          response.body.value[0].should.be.a("Object");
+          BPNotificationID = response.body.value[0].ID
+          console.info(BPNotificationID);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err)
+        }
+      });
   });
 });
 
+describe("Handle Draft", () => {
+  it("Enable darft", (done) => {
+    let headers = {
+      "Content-Type": "application/json",
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).post(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=true)/service.businessPartnerValidation.SalesService.draftEdit?$select=HasActiveEntity,HasDraftEntity,ID,IsActiveEntity,businessPartnerId,businessPartnerName,verificationStatus_code&$expand=DraftAdministrativeData($select=DraftUUID,InProcessByUser),verificationStatus($select=code,updateCode)`)
+      .set(headers).send({ "PreserveChanges": true }).end((err, response) => {
+        try {
+          response.should.have.status(201);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+
+  });
+  it("Check for Active entity", (done) => {
+    let headers = {
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).get(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=false)`)
+      .set(headers).end((err, response) => {
+        try {
+          response.should.have.status(200);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+
+  });
+  it("Payload for varification Status", (done) => {
+    let headers = {
+      "Content-Type": "application/json",
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).patch(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=false)`)
+      .set(headers).send({ "verificationStatus_code": "V" }).end((err, response) => {
+        try {
+          response.should.have.status(200);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+
+  });
+  it("Side Effect Check", (done) => {
+    let headers = {
+      "Content-Type": "application/json",
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).post(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=false)/service.businessPartnerValidation.SalesService.draftPrepare`)
+      .set(headers).send({ "SideEffectsQualifier": "" }).end((err, response) => {
+        try {
+          response.should.have.status(200);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+
+  });
+  it("Publish Draft", (done) => {
+    let headers = {
+      "Content-Type": "application/json",
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).post(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=false)/service.businessPartnerValidation.SalesService.draftActivate`)
+      .set(headers).send({ "SideEffectsQualifier": "" }).end((err, response) => {
+        try {
+          response.should.have.status(201);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+  });
+});
+
+describe("Confirm varification Status", () => {
+  it("Confirm Published Status", (done) => {
+    let headers = {
+      "Authorization": "bearer " + xsuaa_access_token
+    };
+    chai.request(config.service_domain).get(`sales/Notifications(ID=${BPNotificationID},IsActiveEntity=true)`)
+      .set(headers).end((err, response) => {
+        try {
+          expect(response.body.verificationStatus_code).to.equal("V");
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+  });
+});
+
+
+describe("Change Status to Confirmed", () => {
+  it("Change status in mock app", (done) => {
+    chai.request(config.mock.url).put(`api-business-partner/A_BusinessPartner('${payload.BusinessPartner}')`)
+      .send({ "BusinessPartnerIsBlocked": false })
+      .end((err, response) => {
+        try {
+          expect(response.body.BusinessPartnerIsBlocked).to.equal(false);
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err);
+        }
+      });
+  });
+});
+
+describe("Check Final Status", () => {
+  it(`Check Changed status in Service ${payload.BusinessPartner}`, (done) => {
+    chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`)
+      .set('Authorization', 'bearer ' + xsuaa_access_token).end((err, response) => {
+        try {
+          expect(response.body.value[0].verificationStatus_code).to.equal("C");
+          done();
+        } catch (err) {
+          console.error(err);
+          done(err)
+        }
+      });
+  });
+});
