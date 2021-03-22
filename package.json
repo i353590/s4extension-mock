@@ -18,12 +18,14 @@
   },
   "scripts": {
     "start": "npx cds run",
-    "test": "jest jest -- --i --maxConcurrency=1 --maxWorkers=1"
+
+    "test": "jest jest"
   },
   "devDependencies": {
-    "sqlite3": "^4.1.1",
+    "axios": "^0.21.1",
     "jest": "*",
-    "axios": "^0.21.1"
+    "mocha": "^8.3.2",
+    "sqlite3": "^4.1.1"
   },
   "cds": {
     "--hana": {
