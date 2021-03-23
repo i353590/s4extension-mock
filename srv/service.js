@@ -30,6 +30,10 @@ module.exports = async srv => {
     // ID has prefix 000 needs to be removed to read address
     log.info(BUSINESSPARTNER);
     const bpEntity = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartner).where({businessPartnerId: BUSINESSPARTNER}));
+    if(!bpEntity){
+      log.info(`BP doesn't exist in the given destination`);
+      return;
+    }
     const result = await cds.tx(msg).run(INSERT.into(Notifications).entries({businessPartnerId:BUSINESSPARTNER, verificationStatus_code:'N', businessPartnerName:bpEntity.businessPartnerName}));
     const address = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
     // for the address to notification association - extra field
