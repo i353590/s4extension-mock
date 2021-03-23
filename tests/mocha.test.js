@@ -1,10 +1,9 @@
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-  "BusinessPartner": "171000257",
+  "BusinessPartner": "171000258",
   "BusinessPartnerIsBlocked": true,
   "BusinessPartnerFullName": "White Sky"
 };
-
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const config = require("./testscripts/util/config");
@@ -210,8 +209,12 @@ function runNext() {
   });
 
   describe("Check Final Status", () => {
+    const sleep = (ms) => {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
     it(`Check Changed status in Service ${payload.BusinessPartner}`, (done) => {
-      chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`)
+      sleep(8000).then(()=>{
+        chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`)
         .set('Authorization', 'bearer ' + xsuaa_access_token).end((err, response) => {
           try {
             expect(response.body.value[0].verificationStatus_code).to.equal("C");
@@ -221,6 +224,7 @@ function runNext() {
             done(err)
           }
         });
+      });
     });
   });
 }
