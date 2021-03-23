@@ -1,6 +1,6 @@
 // Payload for BP Creation, ensure it's unique 
 var payload = {
-  "BusinessPartner": "171000258",
+  "BusinessPartner": "171000259",
   "BusinessPartnerIsBlocked": true,
   "BusinessPartnerFullName": "White Sky"
 };
