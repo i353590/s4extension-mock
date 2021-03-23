@@ -1,6 +1,7 @@
 // Payload for BP Creation, ensure it's unique 
+let id = new Date().getTime().toString().slice(0,9);
 var payload = {
-  "BusinessPartner": "171000259",
+  "BusinessPartner": id,
   "BusinessPartnerIsBlocked": true,
   "BusinessPartnerFullName": "White Sky"
 };
