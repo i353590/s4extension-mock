@@ -29,7 +29,7 @@
     "sqlite3": "^4.1.1"
   },
   "cds": {
-    "--hana": {
+    "hana": {
       "deploy-format": "hdbtable"
     },
     "requires": {
