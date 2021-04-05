@@ -55,7 +55,7 @@ The application requires below set of SAP Cloud Platform Entitlements/Quota
 |-----------------------------------|------------|:-------------------:|
 | Enterprise Messaging              | default    |          1          |
 | SAP HANA Schemas & HDI Containers | hdi-shared |          1          |
-| SAP Hana Service                  | 64standard |          1          |
+| SAP Hana Cloud.                   | hana       |          1          |
 | Application Runtime               |            |          1          |
 | Extension Factory Runtime         |            |          1          |
 
