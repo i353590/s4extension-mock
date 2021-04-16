@@ -26,10 +26,10 @@
     "mocha": "^8.3.2",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
-    "sqlite3": "^4.1.1"
+    "sqlite3": "^5.0.0"
   },
   "cds": {
-    "--hana": {
+    "hana": {
       "deploy-format": "hdbtable"
     },
     "requires": {
