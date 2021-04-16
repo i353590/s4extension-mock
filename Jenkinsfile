@@ -9,7 +9,7 @@ node{
 			deleteDir()
       		checkout scm	 
 	 		sh '''
-			    npm config delete @sap:registry
+			    npm config set strict-ssl false
 			    npm config set unsafe-perm true
 			    npm rm -g @sap/cds
 			    npm i -g @sap/cds-dk
