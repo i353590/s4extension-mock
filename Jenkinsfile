@@ -2,14 +2,13 @@
 @Library(['piper-lib', 'piper-lib-os']) _
 
 node{
-	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:latest' ) {
+	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ) {
 
 	try {
 		stage ('Build') { 
 			deleteDir()
       		checkout scm	 
 	 		sh '''
-			    npm config set strict-ssl false
 			    npm config set unsafe-perm true
 			    npm rm -g @sap/cds
 			    npm i -g @sap/cds-dk
