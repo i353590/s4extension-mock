@@ -71,8 +71,8 @@ node{
 		   		cf delete BusinessPartnerValidation-srv-mocks -f
 		   		echo 'y' | cf undeploy BusinessPartnerValidation
 		   	'''
-		 
-	    }*/
+		*/ 
+	    }
 	}
 	catch(e){
 		echo 'This will run only if failed'
