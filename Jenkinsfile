@@ -1,17 +1,4 @@
-node{
-	stage("build"){
-		sh '''
-		curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
-         	ls
-          	./cf --version
-		'''
-		stage("deploy"){
-			echo "test deploy"
-		}
-	}
-
-
-/*#!/usr/bin/env groovy
+#!/usr/bin/env groovy
 @Library(['piper-lib', 'piper-lib-os']) _
 
 node{
@@ -94,5 +81,5 @@ node{
 	finally {
 		 //emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'prajin.op@sap.com'
 	}
-}*/
+}
 } 
