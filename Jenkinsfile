@@ -79,7 +79,7 @@ node{
 		currentBuild.result = "FAILURE"
 	}
 	finally {
-		 //emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'prajin.op@sap.com'
+		 emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'prajin.op@sap.com'
 	}
 }
 } 
