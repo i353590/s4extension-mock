@@ -1,9 +1,22 @@
-#!/usr/bin/env groovy
+node{
+	stage("build"){
+		sh '''
+		curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
+         	ls
+          	./cf --version
+		'''
+		stage("deploy"){
+			echo "test deploy"
+		}
+	}
+
+
+/*#!/usr/bin/env groovy
 @Library(['piper-lib', 'piper-lib-os']) _
 
 node{
 	echo "testing pipeline"
-/*	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ) {
+	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ) {
 
 	try {
 		stage ('Build') { 
