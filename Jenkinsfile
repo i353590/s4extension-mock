@@ -2,7 +2,6 @@
 @Library(['piper-lib', 'piper-lib-os']) _
 
 node{
-	echo "testing pipeline"
 	dockerExecuteOnKubernetes(script: this, dockerEnvVars: ['pusername':pusername, 'puserpwd':puserpwd], dockerImage: 'docker.wdf.sap.corp:51010/sfext:v3' ) {
 
 	try {
