@@ -6,7 +6,7 @@ node{
 
 	try {
 		stage ('Build') { 
-      		deleteDir()
+			deleteDir()
       		checkout scm	 
 	 		sh '''
 			    npm config set unsafe-perm true
@@ -27,16 +27,12 @@ node{
 	  	}
 
 	  	stage('Deploy Mock'){
-              echo "deploying binaries..."              
-              
 			setupCommonPipelineEnvironment script:this
 			cloudFoundryDeploy script:this, deployTool:'cf_native', cloudFoundry: [manifest: 'tests/mocks/gen/srv/manifest.yml']
 			cloudFoundryDeploy script:this, deployTool:'mtaDeployPlugin'  	
-        
         }
 
 		stage('Mock Integration Test'){
-            
 			catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
 				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'pusercf', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 					sh "cf login -a ${commonPipelineEnvironment.configuration.steps.cloudFoundryDeploy.cloudFoundry.apiEndpoint} -u $USERNAME -p $PASSWORD -o ${commonPipelineEnvironment.configuration.steps.cloudFoundryDeploy.cloudFoundry.org} -s ${commonPipelineEnvironment.configuration.steps.cloudFoundryDeploy.cloudFoundry.space}"
@@ -61,7 +57,7 @@ node{
 	    } 
 
  	   	stage('UI Test'){
-		  
+		   
 			build job: 'customlogicS4_demoscript'
 		
 		}
@@ -70,7 +66,7 @@ node{
 		   		cf delete BusinessPartnerValidation-srv-mocks -f
 		   		echo 'y' | cf undeploy BusinessPartnerValidation
 		   	'''
-		
+		 
 	    }
 	}
 	catch(e){
@@ -78,7 +74,7 @@ node{
 		currentBuild.result = "FAILURE"
 	}
 	finally {
-		// emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'prajin.op@sap.com'
+		 //emailext body: '$DEFAULT_CONTENT', subject: '$DEFAULT_SUBJECT', to: 'DL_5731D8E45F99B75FC100004A@global.corp.sap,DL_58CB9B1A5F99B78BCC00001A@global.corp.sap'
 	}
 }
 } 
