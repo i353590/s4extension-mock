@@ -56,6 +56,11 @@ node{
 			cloudFoundryDeploy script:this, deployTool:'mtaDeployPlugin'  
 	    } 
 
+ 	   	stage('UI Test'){
+		   
+			build job: 'customlogicS4_demoscript'
+		
+		}
 	   	stage('Undeploy'){
 			sh'''
 		   		cf delete BusinessPartnerValidation-srv-mocks -f
