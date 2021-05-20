@@ -4,6 +4,6 @@ steps:
   cloudFoundryDeploy:
     cloudFoundry:
       credentialsId: 'pusercf'
-      apiEndpoint: 'https://api.cf.sap.hana.ondemand.com'
-      org: 'referenceapps_deploymenttest'
-      space: 'CI-CD'
+      apiEndpoint: 'https://api.cf.eu10.hana.ondemand.com'
+      org: 'referenceappscf'
+      space: 'CICD_s4ext'
