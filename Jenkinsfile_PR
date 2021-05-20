@@ -45,18 +45,8 @@ node{
 				'''
 			}
 	    }
-	  
-	   	stage('Redeploy'){
-		   	sh "rm -rf *"
-      		checkout scm
-		   	sh '''
-			    mv ./build/xs-security.json xs-security.json
-			    mbt build -p=cf
-			'''
-			cloudFoundryDeploy script:this, deployTool:'mtaDeployPlugin'  
-	    } 
- 	   	
-	   	stage('Undeploy'){
+    
+ 		stage('Undeploy'){
 			sh'''
 		   		cf delete BusinessPartnerValidation-srv-mocks -f
 		   		echo 'y' | cf undeploy BusinessPartnerValidation
