@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: BusinessPartnerValidation-srv-mocks
+  - name: BusinessPartnerValidation-srv-mocks123
     path: .
     memory: 256M
     buildpacks:
