@@ -58,7 +58,7 @@ node{
 
  	   	stage('UI Test'){
 		   
-			build job: 'customlogicS4_demoscript'
+			build job: 'test_s4_demoscript'
 		
 		}
 	   	stage('Undeploy'){
