@@ -49,26 +49,74 @@ modules:
     # 'hana' and 'xsuaa' resources extracted from CAP configuration
     - name: BusinessPartnerValidation-db
 
+  #####################################################################################################################
+  # Launchpad Module
+  #####################################################################################################################
+ - name: cloud-extension-s4hana-bp-launchpad
+   type: com.sap.application.content
+   requires:
+     - name: BusinessPartnerValidation-xsuaa
+       parameters:
+         service-key:
+           name: BusinessPartnerValidation-xsuaa-key
+     - name:  cloud-extension-s4hana-bp_html5_repo_host
+       parameters:
+         service-key:
+           name: cloud-extension-s4hana-bp_html5_repo_host-key
+     - name: srv-binding
+     - name: BusinessPartnerValidation-dest
+       parameters:
+         content-target: true
+   parameters:
+      content:
+        instance:
+          destinations:
+            - Authentication: OAuth2UserTokenExchange
+              Name: BusinessPartnerValidation-srv
+              TokenServiceInstanceName: BusinessPartnerValidation-xsuaa
+              TokenServiceKeyName: BusinessPartnerValidation-srv-key
+              URL: ~{srvbinding/url}
+              sap.cloud.service: sap.sf
+            - Name: cloud-extension-s4hana-bp_html5_repo_host
+              ServiceInstanceName: cloud-extension-s4hana-bp_html5_repo_host
+              ServiceKeyName: cloud-extension-s4hana-bp_html5_repo_host-key
+              sap.cloud.service: sap.sf
+            - Authentication: OAuth2UserTokenExchange
+              Name: BusinessPartnerValidation-xsuaa
+              ServiceInstanceName: BusinessPartnerValidation-xsuaa
+              ServiceKeyName: BusinessPartnerValidation-xsuaa-key
+              sap.cloud.service: sap.sf             
+          existing_destinations_policy: update
+      build-parameters:
+        no-source: true
+
+ - name: cloud-extension-s4hana-bp-app-content
+   type: com.sap.application.content
+   path: .
+   requires:
+     - name: cloud-extension-s4hana-bp_html5_repo_host
+       parameters:
+           content-target: true
+   build-parameters:
+    build-result: resources
+    requires:
+     - artifacts:
+          - BusinessPartnerValidation-ui.zip
+       name: BusinessPartnerValidation-ui
+       target-path: resources/
+
 #UI Module
  - name: BusinessPartnerValidation-ui
    type: html5
    path: app/BusinessPartners
-   parameters:
-     disk-quota: 1024MB
-     memory: 128MB
    build-parameters:
-     builder: npm
-    # commands:
-     #  - npm run-script build
-   requires:
-     - name: BusinessPartnerValidation-dest # <-- Destination Service
-     - name: BusinessPartnerValidation-xsuaa # <-- User Authentication and Authorization
-     - name: srv-binding
-       group: destinations
-       properties:
-         forwardAuthToken: true
-         name: srv-binding
-         url: '~{srv-url}'
+     builder: custom
+     commands:
+       - npm install
+       - npm run build
+     supported-platforms: []
+     build-result: dist
+
 
 resources:
  # services extracted from CAP configuration
@@ -109,8 +157,22 @@ resources:
      service: connectivity
      service-plan: lite
    type: org.cloudfoundry.managed-service
+# Application logs Service
  - name: BusinessPartnerValidation-logs
    parameters:
      service: application-logs
      service-plan: lite
+   type: org.cloudfoundry.managed-service
+
+# HTML5 Repo Runtime
+ - name: cloud-extension-s4hana-bp_html5_repo_runtime
+   parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+# HTML5 Repo Host
+ - name: cloud-extension-s4hana-bp_html5_repo_host
+   parameters:
+      service-plan: app-host
+      service: html5-apps-repo
    type: org.cloudfoundry.managed-service

@@ -35,7 +35,22 @@
         "sourceTemplate": {
             "id": "ui5template.fiorielements.v4.lrop",
             "version": "1.0.0"
-        }
+        },
+        "crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "partners",
+					"action": "display",
+					"title": "Business Partners",
+					"subTitle": "Manage Business Partners",
+					"icon": "sap-icon://project-definition-triangle"
+				}
+			}
+		}
     },
     "sap.ui": {
         "technology": "UI5",
