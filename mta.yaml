@@ -33,7 +33,7 @@ modules:
     - name: BusinessPartnerValidation-ems
     - name: BusinessPartnerValidation-cs
    provides:
-    - name: srv-binding      # required by consumers of CAP services (e.g. approuter)
+    - name: srv_api     # required by consumers of CAP services (e.g. approuter)
       properties:
         srv-url: ${default-url}
 
@@ -54,6 +54,8 @@ modules:
   #####################################################################################################################
  - name: cloud-extension-s4hana-bp-launchpad
    type: com.sap.application.content
+   build-parameters:
+      no-source: true
    requires:
      - name: BusinessPartnerValidation-xsuaa
        parameters:
@@ -63,7 +65,7 @@ modules:
        parameters:
          service-key:
            name: cloud-extension-s4hana-bp_html5_repo_host-key
-     - name: srv-binding
+     - name: srv_api
      - name: BusinessPartnerValidation-dest
        parameters:
          content-target: true
@@ -75,20 +77,19 @@ modules:
               Name: BusinessPartnerValidation-srv
               TokenServiceInstanceName: BusinessPartnerValidation-xsuaa
               TokenServiceKeyName: BusinessPartnerValidation-srv-key
-              URL: ~{srvbinding/url}
-              sap.cloud.service: sap.sf
+              URL: ~{srv_api/srv-url}
+              sap.cloud.service: com.sap.bp.BusinessPartners
             - Name: cloud-extension-s4hana-bp_html5_repo_host
               ServiceInstanceName: cloud-extension-s4hana-bp_html5_repo_host
               ServiceKeyName: cloud-extension-s4hana-bp_html5_repo_host-key
-              sap.cloud.service: sap.sf
+              sap.cloud.service: com.sap.bp.BusinessPartners
             - Authentication: OAuth2UserTokenExchange
               Name: BusinessPartnerValidation-xsuaa
               ServiceInstanceName: BusinessPartnerValidation-xsuaa
               ServiceKeyName: BusinessPartnerValidation-xsuaa-key
-              sap.cloud.service: sap.sf             
+              sap.cloud.service: com.sap.bp.BusinessPartners            
           existing_destinations_policy: update
-      build-parameters:
-        no-source: true
+
 
  - name: cloud-extension-s4hana-bp-app-content
    type: com.sap.application.content

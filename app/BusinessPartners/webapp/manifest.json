@@ -52,6 +52,10 @@
 			}
 		}
     },
+    "sap.cloud": {
+        "public": true,
+        "service": "com.sap.bp.BusinessPartners"
+    },
     "sap.ui": {
         "technology": "UI5",
         "icons": {
