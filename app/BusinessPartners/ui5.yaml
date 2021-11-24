@@ -31,6 +31,6 @@ builder:
   - name: ui5-task-zipper
     afterTask: generateCachebusterInfo
     configuration:
-      archiveName: BusinessPartnerValidation-ui
+      archiveName: comsapbpBusinessPartners
       additionalFiles:
       - xs-app.json
