@@ -5,6 +5,9 @@
         "scripts": {
                 "start": "node node_modules/@sap/approuter/approuter.js"
         },
+        "engines": {
+                "node": "14.x"
+        },
         "license": "ISC",
         "dependencies": {
                 "@sap/approuter": "^10"
