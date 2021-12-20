@@ -21,16 +21,16 @@ server:
     configuration:
      port: 35729
      path: webapp
- builder:
-  customTasks:	
-  - name: webide-extension-task-updateManifestJson	
-    beforeTask: generateManifestBundle	
-    configuration:	
-      appFolder: webapp	
-      destDir: dist	
-  - name: ui5-task-zipper	
-    afterTask: generateCachebusterInfo	
-    configuration:	
-      archiveName: comsapbpBusinessPartners	
-      additionalFiles:	
-      - xs-app.json
+builder:	
+   customTasks:	
+   - name: webide-extension-task-updateManifestJson	
+     beforeTask: generateManifestBundle	
+     configuration:	
+       appFolder: webapp	
+       destDir: dist	
+   - name: ui5-task-zipper	
+     afterTask: generateCachebusterInfo	
+     configuration:	
+       archiveName: comsapbpBusinessPartners	
+       additionalFiles:	
+       - xs-app.json 
