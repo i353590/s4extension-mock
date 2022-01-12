@@ -12,8 +12,8 @@ module.exports = async srv => {
   const app = cds.app;
   app.use(log.logNetwork);
   
-  srv.on("READ", BusinessPartnerAddress, req => bupaSrv.tx(req).run(req.query))
-  srv.on("READ", BusinessPartner, req => bupaSrv.tx(req).run(req.query))
+  srv.on("READ", BusinessPartnerAddress, req => bupaSrv.run(req.query))
+  srv.on("READ", BusinessPartner, req => bupaSrv.run(req.query))
 
   messaging.on(["refapps/bpems/abc/S4H/BO/BusinessPartner/Created", "refapps/bpems/abc/ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Created/v1"], async msg => {
     
@@ -29,18 +29,20 @@ module.exports = async srv => {
       
     // ID has prefix 000 needs to be removed to read address
     log.info(BUSINESSPARTNER);
-    const bpEntity = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartner).where({businessPartnerId: BUSINESSPARTNER}));
+    //let bupasrvtx = await bupaSrv.tx(msg)
+    //let cdstx = await cds.tx(msg)
+    const bpEntity = await bupaSrv.run(SELECT.one(BusinessPartner).where({businessPartnerId: BUSINESSPARTNER}));
     if(!bpEntity){
       log.info(`BP doesn't exist in the given destination`);
       return;
     }
-    const result = await cds.tx(msg).run(INSERT.into(Notifications).entries({businessPartnerId:BUSINESSPARTNER, verificationStatus_code:'N', businessPartnerName:bpEntity.businessPartnerName}));
-    const address = await bupaSrv.tx(msg).run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
+    const result = await cds.run(INSERT.into(Notifications).entries({businessPartnerId:BUSINESSPARTNER, verificationStatus_code:'N', businessPartnerName:bpEntity.businessPartnerName}));
+    const address = await bupaSrv.run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
     // for the address to notification association - extra field
     if(address){
-      const notificationObj = await cds.tx(msg).run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
+      const notificationObj = await cds.run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
       address.notifications_ID=notificationObj.ID;
-      const res = await cds.tx(msg).run(INSERT.into(Addresses).entries(address));
+      const res = await cds.run(INSERT.into(Addresses).entries(address));
       log.info("Address inserted");
     }
   });
@@ -55,9 +57,9 @@ module.exports = async srv => {
     else{
        BUSINESSPARTNER = (+(msg.data.KEY[0].BUSINESSPARTNER)).toString();
     }
-    const bpIsAlive = await cds.tx(msg).run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
+    const bpIsAlive = await cds.run(SELECT.one(Notifications, (n) => n.verificationStatus_code).where({businessPartnerId: BUSINESSPARTNER}));
     if(bpIsAlive && bpIsAlive.verificationStatus_code == "V"){
-      const bpMarkVerified= await cds.tx(msg).run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"C"}));
+      const bpMarkVerified= await cds.run(UPDATE(Notifications).where({businessPartnerId: BUSINESSPARTNER}).set({verificationStatus_code:"C"}));
     }    
     log.info("<< BP marked verified >> ")
   });
@@ -87,7 +89,7 @@ module.exports = async srv => {
   });
 
   async function emitEvent(result, req){
-    const resultJoin =  await cds.tx(req).run(SELECT.one("my.businessPartnerValidation.Notifications as N").leftJoin("my.businessPartnerValidation.Addresses as A").on("N.businessPartnerId = A.businessPartnerId").where({"N.ID": result.ID}));
+    const resultJoin =  await cds.run(SELECT.one("my.businessPartnerValidation.Notifications as N").leftJoin("my.businessPartnerValidation.Addresses as A").on("N.businessPartnerId = A.businessPartnerId").where({"N.ID": result.ID}));
     const statusValues={"N":"NEW", "P":"PROCESS", "INV":"INVALID", "V":"VERIFIED"}
     // Format JSON as per serverless requires
     const payload = {
@@ -102,7 +104,7 @@ module.exports = async srv => {
     }
     log.info(`<< emit formatted >>>>> ${JSON.stringify(payload)}`);
     try{
-     let msg = await messaging.tx(req).emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload);
+     let msg = await messaging.emit(`${namespace}/SalesService/d41d/BusinessPartnerVerified`, payload);
       log.info(`Message emitted to Queue ${msg}`);
     }
     catch(e){
