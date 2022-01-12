@@ -40,7 +40,7 @@ module.exports = async srv => {
     const address = await bupaSrv.run(SELECT.one(BusinessPartnerAddress).where({businessPartnerId: BUSINESSPARTNER}));
     // for the address to notification association - extra field
     if(address){
-      const notificationObj = cds.run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
+      const notificationObj = await cds.run(SELECT.one(Notifications).columns("ID").where({businessPartnerId: BUSINESSPARTNER}));
       address.notifications_ID=notificationObj.ID;
       const res = await cds.run(INSERT.into(Addresses).entries(address));
       log.info("Address inserted");
