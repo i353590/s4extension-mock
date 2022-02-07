@@ -37,20 +37,20 @@
             "version": "1.0.0"
         },
         "crossNavigation": {
-			"inbounds": {
-				"intent1": {
-					"signature": {
-						"parameters": {},
-						"additionalParameters": "allowed"
-					},
-					"semanticObject": "partners",
-					"action": "display",
-					"title": "Business Partners",
-					"subTitle": "Manage Business Partners",
-					"icon": "sap-icon://project-definition-triangle"
-				}
-			}
-		}
+            "inbounds": {
+                "intent1": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "partners",
+                    "action": "display",
+                    "title": "Business Partners",
+                    "subTitle": "Manage Business Partners",
+                    "icon": "sap-icon://project-definition-triangle"
+                }
+            }
+        }
     },
     "sap.cloud": {
         "public": true,
@@ -100,8 +100,7 @@
             }
         },
         "routing": {
-            "routes": [
-                {
+            "routes": [{
                     "pattern": "",
                     "name": "NotificationList",
                     "target": [
@@ -112,7 +111,6 @@
                     "pattern": "Notifications({key})",
                     "name": "NotificationObjectPage",
                     "target": [
-                        "NotificationList",
                         "NotificationObjectPage"
                     ]
                 },
