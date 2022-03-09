@@ -38,6 +38,7 @@ The Business Partner Validation application is developed using SAP Cloud Applica
 
 ### For local development you would require the following:
 * [Node js](https://nodejs.org/en/download/)
+>Make sure you run the latest long-term support (LTS) version of Node.js with an even number like 16. Refrain from using odd versions, for which some modules with native parts will have no support and thus might even fail to install. In case of problems, see the [Troubleshooting guide](https://cap.cloud.sap/docs/advanced/troubleshooting#node-version) for CAP for more details.
 * [Cloud Foundry Command Line Interface (CLI)](https://github.com/cloudfoundry/cli#downloads)
 * [Visual Studio Code](https://cap.cloud.sap/docs/get-started/in-vscode)
 * [cds-dk](https://cap.cloud.sap/docs/get-started/)
@@ -76,6 +77,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 #### Steps to deploy locally
 
 - Open terminal in VSCode
+- Run `npm install sqlite3 --save-dev`
 - Run `cds watch`
 
 #### Steps to deploy the application on CF
@@ -171,4 +173,3 @@ In case you find a bug, or you need additional support, please open an issue her
 
 ## License
 Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved. This file is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
-
