@@ -8,7 +8,6 @@ This application showcases:
 - Building application on SAP Cloud Platform(CP) using [SAP Cloud Application Programming Model(CAP)](https://cap.cloud.sap/docs/)
 - Consuming Events from S/4 HANA on premise using [SAP CP Enterprise Messaging](https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/df532e8735eb4322b00bfc7e42f84e8d.html)
 - Consuming REST API's from S/4 HANA on premise using SAP CP Connectivity Service
-- Building and deploying a function in [SAP Cloud platform Serverless Runtime](https://help.sap.com/viewer/bf7b2ff68518427c85b30ac3184ad215/Cloud/en-US/7b8cc2b0e8d141d6aa37c7dff4d70b82.html)
 
 ## Business Scenario
 
@@ -20,21 +19,19 @@ John who is an employee of Business Partner Validation Firm iCredible, which is 
 
 - Changes in S/4 communicated via events in real time to extension application.
 
-- Compute intensive processing available on demand (serverless environment).
-
 - Vendor personnel needs access to only custom app
 
 ## Architecture
 
 ### Solution Diagram
 
-![solution diagram](./documentation/images/solution-diagram.jpg)
+![solution diagram](./documentation/images/solution-diagram-latest.png)
 
-The Business Partner Validation application is developed using SAP Cloud Application programming Model (CAP) and runs and runs on the SAP Cloud Platform Cloud Foundry Environment. It consumes platform services like Enterprise Messaging, SAP HANA and Connectivity. The events generated in S/4 HANA on premise are inserted into the Enterprise messaging queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the HANA database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system. The Business Partner Validation App also places the processed events into a Enterprise Message Queue from where a Serverless Application consumes it and posts it back to S/4 HANA on premise system using OData provisioning.
+The Business Partner Validation application is developed using SAP Cloud Application programming Model (CAP) and runs and runs on the SAP Business Technology Platform Cloud Foundry Environment. It consumes platform services like Event Mesh, SAP HANA Cloud and Connectivity. The events generated in S/4 HANA on premise are inserted into the Event Mesh queue. The application running in Cloud Foundry polls the queue for these messages and inserts them into the SAP HANA Cloud database. The Business Partner Validation Application also uses S/4 HANA REST API's to read data from Business Partner Data from S/4 HANA system.
 
 ## Requirements
-* S4 Hana on premise system.
-* SAP Cloud Platform account
+* SAP S/4 Hana system.
+* SAP Business Technology Platform account
 
 ### For local development you would require the following:
 * [Node js](https://nodejs.org/en/download/)
@@ -54,23 +51,22 @@ The application requires below set of SAP Cloud Platform Entitlements/Quota
 
 | Service                           | Plan       | Number of Instances |
 |-----------------------------------|------------|:-------------------:|
-| Enterprise Messaging              | default    |          1          |
+| Event Mesh              | default    |          1          |
 | SAP HANA Schemas & HDI Containers | hdi-shared |          1          |
-| SAP Hana Cloud.                   | hana       |          1          |
+| SAP Hana Cloud                   | hana       |          1          |
 | Application Runtime               |            |          1          |
-| Extension Factory Runtime         |            |          1          |
 
 
 ## Configuration
 
 
-### Step 1: Setup Cloud platform subaccount
+### Step 1: Setup Business Technology platform subaccount
 
-You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de2977205c403bbc107264b8eccf4b/Validation/en-US/fb1b56148f834749a2bf51127421610b.html) to setup the subaccount. Boosters Will create the subaccount with the required entitlements, subscriptions and assign the required roles to your user to run this application. Steps to run the booster are provided in [link](./documentation/mission/Prepare-Cloud-Platform/Booster.md). You can create subaccount manually also following [link](./documentation/mission/Prepare-Cloud-Platform/README.md)
+You can use [SAP Business Technology Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de2977205c403bbc107264b8eccf4b/Validation/en-US/fb1b56148f834749a2bf51127421610b.html) to setup the subaccount. Boosters Will create the subaccount with the required entitlements, subscriptions and assign the required roles to your user to run this application. Steps to run the booster are provided in [link](./documentation/mission/Prepare-Cloud-Platform/Booster.md). You can create subaccount manually also following [link](./documentation/mission/Prepare-Cloud-Platform/README.md)
 
 ### Step 2: [S/4 HANA Enable OData Service for business partner](./documentation/mission/configure-oData-Service/README.md)
 
-### Step 3: [Setup connectivity between S4Hana system, SAP CP](./documentation/mission/cloud-connector/README.md)
+### Step 3: [Setup connectivity between S/4Hana system, SAP CP](./documentation/mission/cloud-connector/README.md)
 
 ### Step 4: Build and deploy the CAP application
 
@@ -99,9 +95,7 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 
    `cf deploy BusinessPartnerValidation_1.0.0.mtar`
 
-### Step 5: [Build and deploy the serverless application](./serverlessQRCodeGenerator/README.md)
-
-### Step 6: [Configure event based communication between S4 and enterprise messaging](https://help.sap.com/viewer/810dfd34f2cc4f39aa8d946b5204fd9c/1809.000/en-US/fbb2a5980cb54110a96d381e136e0dd8.html)
+### Step 5: [Configure event based communication between S4 and Event Mesh](https://help.sap.com/viewer/810dfd34f2cc4f39aa8d946b5204fd9c/1809.000/en-US/fbb2a5980cb54110a96d381e136e0dd8.html)
 
 
 ## Demo script
@@ -156,12 +150,8 @@ You can use [Cloud Platform - Boosters](https://help.sap.com/viewer/DRAFT/65de29
 17. You can see that the central Block lock has been removed 
 ![release lock](./documentation/images/releasedLock.png)
 
-18. The serverless application has also uploaded a QR code for the address details of the BP to the S4Hana system. 
-You can view this by clicking on the icon in the top left corner. You will have to give permission for downloading the image. 
 
-![attachment List](./documentation/images/attachmentList.png)
-
-19. You can also notice that in the BusinessPartner Validation UI, the status is now set as COMPLETED.
+19. You can notice that in the BusinessPartner Validation UI, the status is now set as COMPLETED.
 
 ## Known Issues
 
