@@ -32,7 +32,7 @@
         "chai-http": "^4.3.0"
     },
     "cds": {
-        "features":{
+        "features": {
             "fetch_csrf": true,
             "kibana_formatter": true
         },
@@ -46,7 +46,9 @@
                     "kind": "enterprise-messaging-shared",
                     "queue": {
                         "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
-                    }
+                    },
+                    "publishPrefix": "$namespace/", 
+                    "subscribePrefix": "$namespace/"
                 }
             },
             "[production]": {
