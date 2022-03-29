@@ -1,0 +1,34 @@
+---
+applications:
+- name: BusinessPartnerValidation-srv
+  env:
+    EXIT: '1'
+    DEPLOY_ATTRIBUTES: |-
+      {
+        "app-content-digest" : "65BE6FFF029ED0B5BA302E53DD40CC01"
+      }
+  stack: cflinuxfs3
+  services:
+  - BusinessPartnerValidation-cs
+  - BusinessPartnerValidation-db
+  - BusinessPartnerValidation-dest
+  - BusinessPartnerValidation-ems
+  - BusinessPartnerValidation-xsuaa
+  routes:
+  - route: sa0176014160-refapps-cicd-cicd-s4ext-businesspartnerval32d7bab1.cfapps.eu10.hana.ondemand.com
+    protocol: http1
+  metadata:
+    labels:
+      mta_id: 6adfc3fbde2b7d604140b5ae5460df92
+    annotations:
+      mta_id: BusinessPartnerValidation
+      mta_version: 1.0.0
+      mta_module: '{"name":"BusinessPartnerValidation-srv"}'
+      mta_module_provided_dependencies: "[]"
+      mta_bound_services: '["BusinessPartnerValidation-db","BusinessPartnerValidation-xsuaa","BusinessPartnerValidation-dest","BusinessPartnerValidation-ems","BusinessPartnerValidation-cs"]'
+  processes:
+  - type: web
+    instances: 1
+    memory: 256M
+    disk_quota: 1024M
+    health-check-type: port

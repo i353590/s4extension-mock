@@ -1,9 +1,26 @@
 // Payload for BP Creation, ensure it's unique 
 let id = new Date().getTime().toString().slice(0,9);
-var payload = {
-  "BusinessPartner": id,
-  "BusinessPartnerIsBlocked": true,
-  "BusinessPartnerFullName": "White Sky"
+var payload ={
+"BusinessPartner":"1378734",
+
+"BusinessPartnerFullName":"PQRS Corp.",
+
+"BusinessPartnerIsBlocked":true,
+
+"to_BusinessPartnerAddress":[{
+
+"AddressID":"1443",
+
+"Country": "US",
+
+"CityName": "New York",
+
+"StreetName":"143 Hope Street",
+
+"PostalCode": "12345"
+
+}]
+
 };
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -67,7 +84,7 @@ describe("Load Created BP ", () => {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
     it(`Load BP ${payload.BusinessPartner}`, (done) => {
-      sleep(10000).then(() => {
+      sleep(20000).then(() => {
       chai.request(config.service_domain).get("sales/Notifications").query(`$filter=(businessPartnerId eq '${payload.BusinessPartner}')`)
         .set('Authorization', 'bearer ' + xsuaa_access_token).end((err, response) => {
           try {

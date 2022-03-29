@@ -4,7 +4,7 @@
     "description": "A simple CAP project.",
     "license": "ISC",
     "dependencies": {
-        "@sap/cds": "5.8.0",
+        "@sap/cds": "5.8.3",
         "@sap/hana-client": "^2.4.182",
         "@sap/xb-msg-amqp-v100": "^0.9.39",
         "@sap/xsenv": "^3.1.1",
@@ -13,7 +13,8 @@
         "express": "^4",
         "grunt": "^1.1.0",
         "passport": "^0.4.1",
-        "postcode-validator": "^3.1.1"
+        "postcode-validator": "^3.1.1",
+        "sqlite3": "^5.0.2"
     },
     "engines": {
         "node": "16.x"
@@ -26,10 +27,10 @@
     },
     "devDependencies": {
         "axios": "^0.21.1",
-        "jest": "*",
-        "mocha": "^9.2.1",
         "chai": "^4.3.4",
-        "chai-http": "^4.3.0"
+        "chai-http": "^4.3.0",
+        "jest": "*",
+        "mocha": "^9.2.1"
     },
     "cds": {
         "features": {
@@ -41,15 +42,12 @@
         },
         "requires": {
             "messaging": {
-                "kind": "local-messaging",
-                "[production]": {
-                    "kind": "enterprise-messaging-shared",
-                    "queue": {
-                        "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
-                    },
-                    "publishPrefix": "$namespace/",
-                    "subscribePrefix": "$namespace/"
-                }
+                "kind": "enterprise-messaging-shared",
+                "queue": {
+                    "name": "refapps/bpems/abc/BusinessPartnerValidation-srv/1234"
+                },
+                "publishPrefix": "$namespace/",
+                "subscribePrefix": "$namespace/"
             },
             "[production]": {
                 "db": {
@@ -63,11 +61,9 @@
             "API_BUSINESS_PARTNER": {
                 "kind": "odata-v2",
                 "model": "srv/external/API_BUSINESS_PARTNER",
-                "[production]": {
-                    "credentials": {
-                        "destination": "bupa",
-                        "requestTimeout": 18000000
-                    }
+                "credentials": {
+                    "destination": "bupa-mock",
+                    "requestTimeout": 18000000
                 }
             },
             "uaa": {
